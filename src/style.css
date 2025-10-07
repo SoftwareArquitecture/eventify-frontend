@@ -1,0 +1,23 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+:root {
+  color-scheme: light;
+}
+
+/* Aplicar Poppins a todos los elementos */
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Asegurar que headings usen Poppins */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Asegurar que inputs y botones usen Poppins */
+input, button, textarea, select {
+  font-family: 'Poppins', sans-serif;
+}
