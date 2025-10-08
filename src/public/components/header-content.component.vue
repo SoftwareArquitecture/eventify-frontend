@@ -8,7 +8,8 @@ export default {
   data() {
     return {
       authenticationStore: useAuthenticationStore(),
-      showUserMenu: false
+      showUserMenu: false,
+      showMobileMenu: false
     };
   },
   computed: {
@@ -42,6 +43,14 @@ export default {
     },
     closeUserMenu() {
       this.showUserMenu = false;
+    },
+    toggleMobileMenu() {
+      this.showMobileMenu = !this.showMobileMenu;
+      this.$emit('toggle-mobile-menu', this.showMobileMenu);
+    },
+    closeMobileMenu() {
+      this.showMobileMenu = false;
+      this.$emit('toggle-mobile-menu', false);
     }
   },
   mounted() {
@@ -59,7 +68,18 @@ export default {
   <div class="header-wrapper">
     <pv-toolbar class="header-toolbar">
       <template #start>
-        <div class="flex align-items-center">
+        <div class="flex align-items-center gap-3">
+          <!-- Botón hamburguesa para móvil -->
+          <button
+            class="hamburger-btn"
+            @click="toggleMobileMenu"
+            :class="{ 'active': showMobileMenu }"
+          >
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </button>
+
           <img src="../../assets/eventify-logo.png" alt="Eventify" class="logo">
         </div>
       </template>
@@ -269,7 +289,51 @@ export default {
   color: #3A506B;
 }
 
+/* Botón hamburguesa */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.hamburger-line {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .logo {
+    width: 120px;
+  }
+
   .user-greeting {
     display: none;
   }
@@ -277,9 +341,21 @@ export default {
   .header-toolbar {
     padding: 0 1rem;
   }
+}
 
+@media (max-width: 480px) {
   .logo {
-    width: 120px;
+    width: 100px;
+  }
+
+  .auth-buttons {
+    gap: 0.5rem;
+  }
+
+  .auth-buttons .sign-in-btn,
+  .auth-buttons .sign-up-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
   }
 }
 </style>

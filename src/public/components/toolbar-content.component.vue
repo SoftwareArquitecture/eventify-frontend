@@ -1,6 +1,12 @@
 <script>
 export default {
   name: "toolbar-content",
+  props: {
+    showMobileMenu: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       menuItems: [
@@ -51,13 +57,23 @@ export default {
   methods: {
     isActiveRoute(route) {
       return this.currentRoute === route || this.currentRoute.startsWith(route + '/');
+    },
+    closeMobileMenu() {
+      this.$emit('close-mobile-menu');
     }
   }
 }
 </script>
 
 <template>
-  <div class="sidebar-wrapper">
+  <div class="sidebar-wrapper" :class="{ 'mobile-open': showMobileMenu }">
+    <!-- Overlay para cerrar menú en móvil -->
+    <div
+      v-if="showMobileMenu"
+      class="mobile-overlay"
+      @click="closeMobileMenu"
+    ></div>
+
     <nav class="sidebar-nav">
       <div class="nav-items">
         <router-link
@@ -66,6 +82,7 @@ export default {
           :to="item.route"
           class="nav-item"
           :class="{ 'nav-item-active': isActiveRoute(item.route) }"
+          @click="closeMobileMenu"
         >
           <div class="nav-item-content">
             <i :class="item.icon" class="nav-icon" :style="{ color: item.color }"></i>
@@ -93,6 +110,8 @@ export default {
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
   border-right: 1px solid #e2e8f0;
   overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 1000;
 }
 
 .sidebar-nav {
@@ -207,10 +226,46 @@ export default {
   background: #94a3b8;
 }
 
-/* Responsive */
+/* Mobile overlay */
+.mobile-overlay {
+  display: none;
+}
+
+/* Responsive - Mobile Menu */
 @media (max-width: 768px) {
   .sidebar-wrapper {
+    position: fixed;
+    left: 0;
+    top: 70px; /* Altura del header */
+    height: calc(100vh - 70px);
+    transform: translateX(-100%);
+    z-index: 999;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-wrapper.mobile-open {
+    transform: translateX(0);
+  }
+
+  .mobile-overlay {
+    display: block;
+    position: fixed;
+    top: 70px;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-wrapper {
     width: 240px;
+  }
+
+  .mobile-overlay {
+    left: 240px;
   }
 
   .nav-label {
@@ -220,12 +275,6 @@ export default {
   .nav-icon {
     font-size: 18px;
     margin-right: 0.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .sidebar-wrapper {
-    width: 200px;
   }
 
   .nav-item-content {
