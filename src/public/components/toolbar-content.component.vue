@@ -9,7 +9,15 @@ export default {
   },
   data() {
     return {
-      menuItems: [
+      // Movemos menuItems a computed para que sea reactivo
+    };
+  },
+  computed: {
+    currentRoute() {
+      return this.$route.path;
+    },
+    menuItems() {
+      return [
         {
           label: this.$t('toolbar.home'),
           route: '/home',
@@ -46,12 +54,7 @@ export default {
           icon: 'pi pi-dollar',
           color: '#0891b2'
         }
-      ]
-    };
-  },
-  computed: {
-    currentRoute() {
-      return this.$route.path;
+      ];
     }
   },
   methods: {
