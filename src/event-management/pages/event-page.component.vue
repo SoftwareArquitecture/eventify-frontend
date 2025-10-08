@@ -312,13 +312,15 @@ export default {
 }
 
 .events-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0; /* Eliminamos el padding para aprovechar todo el ancho */
+  width: 100%; /* Usar todo el ancho disponible */
+  margin: 0; /* Eliminar el centrado automático */
   position: relative;
   z-index: 1;
   color: #ecf0f1;
-  min-height: 100vh;
+  height: 100%; /* Usar toda la altura disponible */
+  display: flex;
+  flex-direction: column;
 }
 
 .events-header {
@@ -326,6 +328,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  padding: 20px; /* Agregar padding interno */
 }
 
 .events-header h1 {
@@ -441,14 +444,17 @@ export default {
 
 .events-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Cambiar a columna para que cada card use todo el ancho */
   gap: 15px;
+  padding: 0 20px; /* Mantener padding lateral moderado */
+  overflow-y: auto; /* Permitir scroll interno si es necesario */
 }
 
 .event-item {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: flex-start; /* Cambiar a flex-start para evitar estirar */
+  width: 100%; /* Asegurar que use todo el ancho */
 }
 
 .event-checkbox {
@@ -469,7 +475,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
-  padding: 15px 0;
+  padding: 15px 20px; /* Agregar padding lateral */
   border-top: 1px solid #4a5a6b;
 }
 

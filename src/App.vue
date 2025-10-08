@@ -69,8 +69,11 @@ export default {
 
 .main-content {
   flex-grow: 1;
-  overflow-y: auto; /* ✅ solo aquí habrá scroll si se necesita */
+  overflow: hidden; /* Eliminamos el scroll vertical */
   transition: margin-left 0.3s ease;
+  height: 100%; /* Aseguramos que tome todo el alto disponible */
+  display: flex;
+  flex-direction: column;
 }
 
 /* Main content para páginas de autenticación */

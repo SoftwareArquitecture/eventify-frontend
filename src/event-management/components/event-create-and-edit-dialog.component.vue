@@ -92,6 +92,10 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    initialDate: {
+      type: String,
+      default: null
     }
   },
   emits: ['close-dialog', 'event-created', 'event-updated', 'hide'],
@@ -124,6 +128,14 @@ export default {
         } else {
           // Si no es edición, limpia el formulario
           this.clearForm();
+        }
+      }
+    },
+    initialDate: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          this.eventData.date = this.formatDateForInput(newVal);
         }
       }
     }

@@ -1,25 +1,26 @@
 <script>
-import MiniCalendar from "../components/mini-calendar.component.vue";
 import EventCalendar from "../components/event-calendar.component.vue";
 
 export default {
   name: "calendar-view",
-  components: {MiniCalendar, EventCalendar},
+  components: {EventCalendar},
 }
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-4 p-5 bg-slate-800 min-h-screen">
-    <div class="col-span-1 bg-slate-700 rounded-lg p-4 border border-slate-600">
-      <mini-calendar/>
-    </div>
-    <div class="col-span-3 bg-slate-700 rounded-lg p-4 border border-slate-600">
-      <event-calendar/>
-    </div>
+  <div class="calendar-page">
+    <event-calendar/>
   </div>
-
 </template>
 
 <style scoped>
-
+.calendar-page {
+  padding: 20px; /* Agregamos padding para que no esté pegado a los bordes */
+  height: 100%; /* Usamos toda la altura disponible del contenedor flex */
+  background-color: #121212;
+  color: #ecf0f1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 </style>

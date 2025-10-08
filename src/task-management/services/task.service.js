@@ -1,99 +1,71 @@
 // src/services/task.service.js
-import axios from 'axios';
-
-// Use Vite's environment variable for the API base URL
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+import httpInstance from '../../shared/services/http.instance.js';
 
 /**
- * Service to interact with the json-server API
+ * Service to interact with the .NET API using the same HTTP instance as the rest of the app
  */
 export const apiService = {
     // ===== Tableros (Boards) =====
-    getBoards: () => axios.get(`${API_URL}/boards`),
-    getBoard: (id) => axios.get(`${API_URL}/boards/${id}`),
-    createBoard: (board) => axios.post(`${API_URL}/boards`, board),
-    updateBoard: (id, board) => axios.put(`${API_URL}/boards/${id}`, board),
-    deleteBoard: (id) => axios.delete(`${API_URL}/boards/${id}`),
-
-    // ===== Columnas =====
-    getBoardColumns: (boardId) =>
-        axios.get(`${API_URL}/columns?boardId=${boardId}&_sort=order&_order=asc`),
-    getColumn: (id) => axios.get(`${API_URL}/columns/${id}`),
-    createColumn: (column) => axios.post(`${API_URL}/columns`, column),
-    updateColumn: (id, column) => axios.put(`${API_URL}/columns/${id}`, column),
-    deleteColumn: (id) => axios.delete(`${API_URL}/columns/${id}`),
-
-    // ===== Tareas =====
-    getColumnTasks: (columnId) =>
-        axios.get(`${API_URL}/tasks?columnId=${columnId}&_sort=order&_order=asc`),
-    getTask: (id) => axios.get(`${API_URL}/tasks/${id}`),
-    createTask: (task) => axios.post(`${API_URL}/tasks`, task),
-    updateTask: (id, task) => axios.put(`${API_URL}/tasks/${id}`, task),
-    deleteTask: (id) => axios.delete(`${API_URL}/tasks/${id}`),
-
-
-
-    /**
-     * Move a task between columns
-     * @param {number} taskId - ID of the task to move
-     * @param {number} sourceColumnId - ID of the source column
-     * @param {number} targetColumnId - ID of the target column
-     */
-    moveTask: async (taskId, sourceColumnId, targetColumnId) => {
+    loadBoard: async (boardId) => {
         try {
-            // Get the current task
-            const taskResponse = await apiService.getTask(taskId);
-            const task = taskResponse.data;
-
-            // Get the tasks in the target column to determine the new order
-            const tasksInTargetResponse = await apiService.getColumnTasks(targetColumnId);
-            const tasksInTarget = tasksInTargetResponse.data;
-
-            // Update the task with the new column and order
-            return await apiService.updateTask(taskId, {
-                ...task,
-                columnId: targetColumnId,
-                order: tasksInTarget.length + 1 // Add to the end of the column
-            });
+            const response = await httpInstance.get(`/tasks/boards/${boardId}`);
+            return response.data;
         } catch (error) {
-            console.error('Error al mover la tarea:', error);
+            console.error('Error cargando el tablero:', error);
             throw error;
         }
     },
 
-    /**
-     * Put together a complete board with its columns and tasks
-     * @param {number} boardId - ID of the board to load
-     * @returns {Promise<Object>} - Board with columns and tasks
-     */
-    loadBoard: async (boardId) => {
+    // ===== Tareas =====
+    createTask: async (task) => {
         try {
-            // 1. Get the board
-            const boardResponse = await apiService.getBoard(boardId);
-            const board = boardResponse.data;
-
-            // 2. Get the columns of the board
-            const columnsResponse = await apiService.getBoardColumns(boardId);
-            const columns = columnsResponse.data;
-
-            // 3. For each column, get the tasks
-            const columnsWithTasks = await Promise.all(
-                columns.map(async (column) => {
-                    const tasksResponse = await apiService.getColumnTasks(column.id);
-                    return {
-                        ...column,
-                        tasks: tasksResponse.data
-                    };
-                })
-            );
-
-            // 4. Return the complete board with columns and tasks
-            return {
-                ...board,
-                columns: columnsWithTasks
-            };
+            const response = await httpInstance.post(`/tasks/tasks`, {
+                Title: task.title,
+                Description: task.description,
+                ColumnId: task.columnId,
+                Order: task.order
+            });
+            return response;
         } catch (error) {
-            console.error('Error cargando el tablero:', error);
+            console.error('Error creando tarea:', error);
+            throw error;
+        }
+    },
+
+    updateTask: async (id, task) => {
+        try {
+            const response = await httpInstance.put(`/tasks/tasks/${id}`, {
+                Title: task.title,
+                Description: task.description,
+                ColumnId: task.columnId,
+                Order: task.order
+            });
+            return response;
+        } catch (error) {
+            console.error('Error actualizando tarea:', error);
+            throw error;
+        }
+    },
+
+    deleteTask: async (id) => {
+        try {
+            const response = await httpInstance.delete(`/tasks/tasks/${id}`);
+            return response;
+        } catch (error) {
+            console.error('Error eliminando tarea:', error);
+            throw error;
+        }
+    },
+
+    moveTask: async (taskId, sourceColumnId, targetColumnId) => {
+        try {
+            const response = await httpInstance.put(`/tasks/tasks/${taskId}/move`, {
+                TargetColumnId: targetColumnId,
+                Order: 1 // Por ahora usar orden fijo, después puedes implementar lógica más compleja
+            });
+            return response;
+        } catch (error) {
+            console.error('Error moviendo tarea:', error);
             throw error;
         }
     }

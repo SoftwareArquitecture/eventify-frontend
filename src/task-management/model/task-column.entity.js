@@ -1,48 +1,86 @@
-// src/task-management/model/task-column.entity.js
 import { Task } from './task.entity.js';
 
 /**
- * Class representing a task column in the board.
+ * TaskColumn entity class
  */
 export class TaskColumn {
-    constructor(id, title, tasks = []) {
+    constructor(id = 0, title = '', boardId = 1, order = 0, tasks = []) {
         this.id = id;
         this.title = title;
-        this.tasks = tasks;
+        this.boardId = boardId;
+        this.order = order;
+        this.tasks = tasks.map(task => task instanceof Task ? task : Task.fromApiResponse(task));
     }
 
-    static create(id, title) {
-        return new TaskColumn(id, title);
+    /**
+     * Create a TaskColumn from API response data
+     * @param {Object} data - Column data from API
+     * @returns {TaskColumn} - TaskColumn instance
+     */
+    static fromApiResponse(data) {
+        return new TaskColumn(
+            data.id,
+            data.title,
+            data.boardId,
+            data.order || 0,
+            data.tasks || []
+        );
     }
 
-    addTask(task) {
-        this.tasks.push(task);
-        return task;
-    }
-
-    removeTask(taskId) {
-        const taskIndex = this.tasks.findIndex(task => task.id === taskId);
-        if (taskIndex !== -1) {
-            const removedTask = this.tasks[taskIndex];
-            this.tasks.splice(taskIndex, 1);
-            return removedTask;
-        }
-        return null;
-    }
-
-    findTask(taskId) {
-        return this.tasks.find(task => task.id === taskId);
-    }
-
-    updateTask(taskId, data) {
-        const task = this.findTask(taskId);
-        if (task) {
-            return task.update(data);
-        }
-        return null;
-    }
-
+    /**
+     * Get the number of tasks in this column
+     * @returns {number} - Task count
+     */
     get taskCount() {
         return this.tasks.length;
+    }
+
+    /**
+     * Add a task to this column
+     * @param {Task} task - Task to add
+     */
+    addTask(task) {
+        if (!(task instanceof Task)) {
+            task = Task.fromApiResponse(task);
+        }
+        task.columnId = this.id;
+        task.order = this.tasks.length + 1;
+        this.tasks.push(task);
+    }
+
+    /**
+     * Remove a task from this column
+     * @param {number} taskId - ID of task to remove
+     */
+    removeTask(taskId) {
+        const index = this.tasks.findIndex(task => task.id === taskId);
+        if (index !== -1) {
+            this.tasks.splice(index, 1);
+            // Reorder remaining tasks
+            this.tasks.forEach((task, idx) => {
+                task.order = idx + 1;
+            });
+        }
+    }
+
+    /**
+     * Update a task in this column
+     * @param {number} taskId - ID of task to update
+     * @param {Object} updates - Updates to apply
+     */
+    updateTask(taskId, updates) {
+        const task = this.tasks.find(task => task.id === taskId);
+        if (task) {
+            task.update(updates);
+        }
+    }
+
+    /**
+     * Find a task by ID
+     * @param {number} taskId - ID of task to find
+     * @returns {Task|null} - Found task or null
+     */
+    findTask(taskId) {
+        return this.tasks.find(task => task.id === taskId) || null;
     }
 }

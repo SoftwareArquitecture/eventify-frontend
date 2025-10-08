@@ -25,12 +25,6 @@ export default {
           color: '#4f46e5'
         },
         {
-          label: this.$t('toolbar.profile'),
-          route: '/profiles',
-          icon: 'pi pi-user',
-          color: '#059669'
-        },
-        {
           label: this.$t('toolbar.calendar'),
           route: '/calendar',
           icon: 'pi pi-calendar',
