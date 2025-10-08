@@ -9,11 +9,11 @@ export default {
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-4">
-    <div class="col-span-1">
+  <div class="grid grid-cols-4 gap-4 p-5 bg-slate-800 min-h-screen">
+    <div class="col-span-1 bg-slate-700 rounded-lg p-4 border border-slate-600">
       <mini-calendar/>
     </div>
-    <div class="col-span-3">
+    <div class="col-span-3 bg-slate-700 rounded-lg p-4 border border-slate-600">
       <event-calendar/>
     </div>
   </div>

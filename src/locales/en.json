@@ -150,6 +150,8 @@
   },
   "eventManagement": {
     "pageTitle": "My Events",
+    "createEvent": "Create New Event",
+    "editEvent": "Edit Event",
     "actions": {
       "selectAll": "Select All",
       "deleteSelected": "Delete Selected",
@@ -160,7 +162,8 @@
       "delete": "Delete",
       "save": "Save",
       "update": "Update",
-      "create": "Create"
+      "create": "Create",
+      "saving": "Saving..."
     },
     "filters": {
       "all": "All",
@@ -176,26 +179,18 @@
     "status": {
       "active": "Active",
       "toBeConfirmed": "To be confirmed",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "completed": "Completed"
     },
     "form": {
-      "createTitle": "Create New Event",
-      "editTitle": "Edit Event",
-      "fields": {
-        "title": "Event Title",
-        "titlePlaceholder": "Enter event title",
-        "date": "Event Date",
-        "customer": "Customer Name",
-        "customerPlaceholder": "Enter customer name",
-        "location": "Location",
-        "locationPlaceholder": "Enter event location",
-        "status": "Status"
-      },
-      "buttons": {
-        "cancel": "Cancel",
-        "create": "Create Event",
-        "update": "Update Event"
-      }
+      "title": "Event Title",
+      "titlePlaceholder": "Enter event title",
+      "date": "Event Date",
+      "customerName": "Customer Name",
+      "customerNamePlaceholder": "Enter customer name",
+      "location": "Location",
+      "locationPlaceholder": "Enter event location",
+      "status": "Status"
     },
     "pagination": {
       "showing": "Showing",

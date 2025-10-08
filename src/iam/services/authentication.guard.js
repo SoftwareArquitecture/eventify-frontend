@@ -12,9 +12,32 @@ import {useAuthenticationStore} from "./authentication.store.js";
  */
 export const authenticationGuard = (to, from, next) => {
     const authenticationStore = useAuthenticationStore();
-    const isAnonymous = !authenticationStore.isSignedIn;
+    
+    // Verificar si hay token en localStorage
+    const token = localStorage.getItem('token');
+    
+    console.log('🛡️ Authentication Guard:', {
+        path: to.path,
+        hasToken: !!token,
+        storeSignedIn: authenticationStore.isSignedIn,
+        tokenPreview: token ? token.substring(0, 20) + '...' : 'No token'
+    });
+    
+    // Si hay token pero el store no refleja que está autenticado, restaurar el estado
+    if (token && !authenticationStore.isSignedIn) {
+        console.log('🔄 Restoring authentication state from localStorage');
+        authenticationStore.initializeAuth();
+    }
+    
+    const isAnonymous = !token;
     const publicRoutes = ['/sign-in', '/sign-up', '/about', '/page-not-found'];
     const routeRequiresToBeAuthenticated = !publicRoutes.includes(to.path);
-    if (isAnonymous && routeRequiresToBeAuthenticated) return next({ name: 'sign-in'});
-    else next();
+    
+    if (isAnonymous && routeRequiresToBeAuthenticated) {
+        console.log('🚫 User not authenticated, redirecting to sign-in');
+        return next({ name: 'sign-in'});
+    } else {
+        console.log('✅ Authentication check passed');
+        next();
+    }
 }

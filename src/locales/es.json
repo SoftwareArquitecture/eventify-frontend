@@ -150,6 +150,8 @@
   },
   "eventManagement": {
     "pageTitle": "Mis Eventos",
+    "createEvent": "Crear Nuevo Evento",
+    "editEvent": "Editar Evento",
     "actions": {
       "selectAll": "Seleccionar Todo",
       "deleteSelected": "Eliminar Seleccionados",
@@ -160,7 +162,8 @@
       "delete": "Eliminar",
       "save": "Guardar",
       "update": "Actualizar",
-      "create": "Crear"
+      "create": "Crear",
+      "saving": "Guardando..."
     },
     "filters": {
       "all": "Todos",
@@ -176,26 +179,18 @@
     "status": {
       "active": "Activo",
       "toBeConfirmed": "Por confirmar",
-      "cancelled": "Cancelado"
+      "cancelled": "Cancelado",
+      "completed": "Completado"
     },
     "form": {
-      "createTitle": "Crear Nuevo Evento",
-      "editTitle": "Editar Evento",
-      "fields": {
-        "title": "Título del Evento",
-        "titlePlaceholder": "Ingresa el título del evento",
-        "date": "Fecha del Evento",
-        "customer": "Nombre del Cliente",
-        "customerPlaceholder": "Ingresa el nombre del cliente",
-        "location": "Ubicación",
-        "locationPlaceholder": "Ingresa la ubicación del evento",
-        "status": "Estado"
-      },
-      "buttons": {
-        "cancel": "Cancelar",
-        "create": "Crear Evento",
-        "update": "Actualizar Evento"
-      }
+      "title": "Título del Evento",
+      "titlePlaceholder": "Ingresa el título del evento",
+      "date": "Fecha del Evento",
+      "customerName": "Nombre del Cliente",
+      "customerNamePlaceholder": "Ingresa el nombre del cliente",
+      "location": "Ubicación",
+      "locationPlaceholder": "Ingresa la ubicación del evento",
+      "status": "Estado"
     },
     "pagination": {
       "showing": "Mostrando",

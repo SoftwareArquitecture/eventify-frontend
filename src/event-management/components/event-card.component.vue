@@ -8,7 +8,7 @@
     <div class="event-details">
       <div class="detail-row">
         <span class="detail-label">Customer:</span>
-        <span class="detail-value">{{ event.customer }}</span>
+        <span class="detail-value">{{ event.customerName }}</span>
       </div>
 
       <div class="detail-row">
@@ -73,58 +73,67 @@ export default {
 .event-card {
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   width: 280px;
   height: 100%;
-  background-color: #f9f9fb;
+  background-color: #34495e;
+  border: 1px solid #4a5a6b;
 }
 
 .event-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
 }
 
 .event-card-selected {
-  border: 2px solid #3a556a;
+  border: 2px solid #4ECDC4;
+  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.3);
 }
 
 .event-header {
   padding: 15px;
-  border-bottom: 1px solid #eee;
-  background-color: #f3f4f6;
+  border-bottom: 1px solid #4a5a6b;
+  background-color: #2c3e50;
 }
 
 .header-active {
-  background-color: #89eca1;
+  background-color: #27ae60;
+  color: white;
 }
 
 .header-pending {
-  background-color: #fff3cd;
+  background-color: #f39c12;
+  color: white;
 }
 
 .header-cancelled {
-  background-color: #fbb3b3;
+  background-color: #e74c3c;
+  color: white;
 }
 
 .header-new {
-  background-color: #cce5ff; /* Color para eventos nuevos */
+  background-color: #4ECDC4;
+  color: #2c3e50;
 }
 
 .event-title {
   margin: 0;
   font-size: 18px;
-  color: #333;
+  color: #ecf0f1;
+  font-weight: 600;
 }
 
 .event-date {
   display: block;
   margin-top: 5px;
   font-size: 14px;
-  color: #666;
+  color: #bdc3c7;
 }
 
 .event-details {
   padding: 15px;
+  background-color: #34495e;
 }
 
 .detail-row {
@@ -135,11 +144,12 @@ export default {
 .detail-label {
   font-weight: bold;
   width: 90px;
-  color: #555;
+  color: #95a5a6;
 }
 
 .detail-value {
   flex: 1;
+  color: #ecf0f1;
 }
 
 .status-row {
@@ -150,39 +160,42 @@ export default {
 }
 
 .event-status {
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: 12px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .status-active {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #27ae60;
+  color: white;
 }
 
 .status-pending {
-  background-color: #fff3cd;
-  color: #856404;
+  background-color: #f39c12;
+  color: white;
 }
 
 .status-cancelled {
-  background-color: #fbb3b3;
-  color: #272727;
+  background-color: #e74c3c;
+  color: white;
 }
 
 .edit-btn {
   background-color: transparent;
-  color: #3a556a;
-  border: 1px solid #3a556a;
-  padding: 5px 15px;
+  color: #4ECDC4;
+  border: 1px solid #4ECDC4;
+  padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .edit-btn:hover {
-  background-color: #3a556a;
-  color: white;
+  background-color: #4ECDC4;
+  color: #2c3e50;
+  transform: translateY(-1px);
 }
 </style>

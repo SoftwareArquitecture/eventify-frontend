@@ -4,7 +4,7 @@
  */
 
 import axios from "axios";
-import {authenticationInterceptor} from "../../iam/services/authentication.interceptor.js";
+import {authenticationInterceptor, responseInterceptor, responseErrorInterceptor} from "../../iam/services/authentication.interceptor.js";
 
 /**
  * Configured axios instance for making HTTP requests
@@ -19,5 +19,9 @@ const httpInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
 });
+
+// Configurar interceptors
 httpInstance.interceptors.request.use(authenticationInterceptor);
+httpInstance.interceptors.response.use(responseInterceptor, responseErrorInterceptor);
+
 export default httpInstance;

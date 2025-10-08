@@ -19,7 +19,7 @@ export default {
     visible:false,
     organizerId: Number
   },
-  emits:['close-dialog','cancel-requested','save-requested','change-visible','quote-order-created','quote-order-updated'],
+  emits:['close-dialog','cancel-requested','save-requested','change-visible','quote-order-created','quote-order-updated','hide'],
   data(){
     return{
       id:'',
@@ -189,7 +189,7 @@ export default {
 
 <template>
 
-  <pv-dialog v-bind:visible="visible" modal>
+  <pv-dialog v-bind:visible="visible" modal @hide="$emit('hide')">
 
     <div class="flex flex-column p-4 quote-container">
 

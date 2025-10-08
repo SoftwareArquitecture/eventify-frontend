@@ -136,11 +136,11 @@ export default {
     </div>
 
     <div class="flex w-5 justify-content-end">
-      <pv-button style="background-color: #3A506B" type="button" @click="createQuoteVisible = true; isEdit=false"><i class="pi pi-plus-circle"></i> {{$t('quoteOrder.newQuote')}}</pv-button>
+      <pv-button style="background-color: #4ECDC4" type="button" @click="createQuoteVisible = true; isEdit=false"><i class="pi pi-plus-circle"></i> {{$t('quoteOrder.newQuote')}}</pv-button>
     </div>
 
   </div>
-  <quote-order-create-and-edit-dialog :organizer-id="organizerId" :item="quoteOrderSelected"  :service-list="serviceItemsForQuoteOrderSelected" :is-edit="isEdit" :visible="createQuoteVisible" @close-dialog="onCloseCreateQuoteDialog" @quote-order-created="onQuoteOrderCreated" @quote-order-updated="onQuoteOrderUpdated"></quote-order-create-and-edit-dialog>
+  <quote-order-create-and-edit-dialog :organizer-id="organizerId" :item="quoteOrderSelected"  :service-list="serviceItemsForQuoteOrderSelected" :is-edit="isEdit" :visible="createQuoteVisible" @close-dialog="onCloseCreateQuoteDialog" @quote-order-created="onQuoteOrderCreated" @quote-order-updated="onQuoteOrderUpdated" @hide="onCloseCreateQuoteDialog"></quote-order-create-and-edit-dialog>
 
     <div>
       <pv-data-table paginator :value="quoteOrderList" :rows="5" class="pl-5 pr-5 mt-5" :filters="filters">

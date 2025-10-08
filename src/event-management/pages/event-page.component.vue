@@ -42,7 +42,7 @@
             </select>
           </div>
 
-          <button class="new-event-btn" @click="navigateToCreateEvent">
+          <button class="new-event-btn" @click="showCreateEventModal">
             {{ $t('eventManagement.actions.newEvent') }}
           </button>
         </div>
@@ -68,7 +68,7 @@
         <event-card
             :event="event"
             :selected="isSelected(event.id)"
-            @edit="navigateToEditEvent(event.id)"
+            @edit="showEditEventModal(event)"
         />
       </div>
     </div>
@@ -120,17 +120,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Event Create/Edit Modal -->
+    <event-create-and-edit-dialog
+        :visible="createEventVisible"
+        :event="selectedEvent"
+        :is-edit="isEdit"
+        @close-dialog="onCloseEventDialog"
+        @event-created="onEventCreated"
+        @event-updated="onEventUpdated"
+        @hide="onCloseEventDialog"
+    />
   </div>
 </template>
 
 <script>
 import EventCard from '../components/event-card.component.vue';
+import EventCreateAndEditDialog from '../components/event-create-and-edit-dialog.component.vue';
 import EventService from '../services/event.service.js';
 
 export default {
   name: 'EventPage',
   components: {
-    EventCard
+    EventCard,
+    EventCreateAndEditDialog
   },
   data() {
     return {
@@ -144,6 +157,10 @@ export default {
       pageSize: 5,
       showDeleteConfirmation: false,
       loading: false,
+      // Modal state
+      createEventVisible: false,
+      selectedEvent: null,
+      isEdit: false
     };
   },
   computed: {
@@ -255,11 +272,31 @@ export default {
         this.currentPage = page;
       }
     },
-    navigateToCreateEvent() {
-      this.$router.push('/events/create');
+    showCreateEventModal() {
+      this.selectedEvent = null;
+      this.isEdit = false;
+      this.createEventVisible = true;
     },
-    navigateToEditEvent(eventId) {
-      this.$router.push(`/events/${eventId}/edit`);
+    showEditEventModal(event) {
+      this.selectedEvent = event;
+      this.isEdit = true;
+      this.createEventVisible = true;
+    },
+    onCloseEventDialog() {
+      this.createEventVisible = false;
+      this.selectedEvent = null;
+      this.isEdit = false;
+    },
+    onEventCreated(newEvent) {
+      this.events.push(newEvent);
+      this.createEventVisible = false;
+    },
+    onEventUpdated(updatedEvent) {
+      const index = this.events.findIndex(event => event.id === updatedEvent.id);
+      if (index !== -1) {
+        this.events[index] = updatedEvent;
+      }
+      this.createEventVisible = false;
     }
   },
   created() {
@@ -278,8 +315,10 @@ export default {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  position: relative; /* Add this property */
-  z-index: 1; /* Add this property to establish the stacking context */
+  position: relative;
+  z-index: 1;
+  color: #ecf0f1;
+  min-height: 100vh;
 }
 
 .events-header {
@@ -287,6 +326,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.events-header h1 {
+  color: #ecf0f1;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .events-actions {
@@ -300,20 +345,32 @@ export default {
   display: flex;
   align-items: center;
   gap: 15px;
-  background-color: #f5f5f5;
+  background-color: #34495e;
   padding: 10px 15px;
-  border-radius: 4px;
+  border-radius: 8px;
   width: 100%;
+  border: 1px solid #4a5a6b;
+}
 
+.select-all {
+  color: #ecf0f1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .delete-selected-btn {
-  background-color: #dc3545;
+  background-color: #e74c3c;
   color: white;
   border: none;
   padding: 8px 15px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-selected-btn:hover {
+  background-color: #c0392b;
 }
 
 .search-filter-bar {
@@ -325,9 +382,22 @@ export default {
 
 .search-filter-bar input {
   flex-grow: 1;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px 12px;
+  border: 1px solid #4a5a6b;
+  border-radius: 6px;
+  background-color: #34495e;
+  color: #ecf0f1;
+  font-size: 14px;
+}
+
+.search-filter-bar input::placeholder {
+  color: #95a5a6;
+}
+
+.search-filter-bar input:focus {
+  outline: none;
+  border-color: #4ECDC4;
+  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
 }
 
 .filters {
@@ -336,18 +406,37 @@ export default {
 }
 
 .filters select {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px 12px;
+  border: 1px solid #4a5a6b;
+  border-radius: 6px;
+  background-color: #34495e;
+  color: #ecf0f1;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: #4ECDC4;
+  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
 }
 
 .new-event-btn {
-  background-color: #3a556a;
-  color: white;
+  background-color: #4ECDC4;
+  color: #2c3e50;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  padding: 10px 16px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.new-event-btn:hover {
+  background-color: #45b7aa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(78, 205, 196, 0.3);
 }
 
 .events-list {
@@ -369,11 +458,23 @@ export default {
   min-width: 24px;
 }
 
+.event-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4ECDC4;
+}
+
 .events-pagination {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
+  padding: 15px 0;
+  border-top: 1px solid #4a5a6b;
+}
+
+.events-pagination span {
+  color: #95a5a6;
 }
 
 .pagination-controls {
@@ -383,10 +484,19 @@ export default {
 }
 
 .pagination-controls button {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
+  padding: 8px 12px;
+  border: 1px solid #4a5a6b;
+  background-color: #34495e;
+  color: #ecf0f1;
   cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #4ECDC4;
+  color: #2c3e50;
+  border-color: #4ECDC4;
 }
 
 .pagination-controls button:disabled {
@@ -395,14 +505,21 @@ export default {
 }
 
 .pagination-controls span {
-  padding: 5px 10px;
+  padding: 8px 12px;
   cursor: pointer;
+  border-radius: 4px;
+  color: #ecf0f1;
+  transition: all 0.3s ease;
+}
+
+.pagination-controls span:hover {
+  background-color: #34495e;
 }
 
 .pagination-controls span.active-page {
-  background-color: #3a556a;
-  color: white;
-  border-radius: 4px;
+  background-color: #4ECDC4;
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .delete-confirmation-modal {
@@ -411,7 +528,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -419,11 +536,18 @@ export default {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #34495e;
+  color: #ecf0f1;
   padding: 20px;
-  border-radius: 4px;
+  border-radius: 8px;
   max-width: 500px;
   width: 90%;
+  border: 1px solid #4a5a6b;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #ecf0f1;
 }
 
 .modal-actions {
@@ -434,20 +558,31 @@ export default {
 }
 
 .cancel-btn {
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.delete-btn {
-  background-color: #dc3545;
+  background-color: #7f8c8d;
   color: white;
   border: none;
   padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #95a5a6;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
 }
 
 /* Styles for loading and empty states */
@@ -455,14 +590,15 @@ export default {
   text-align: center;
   padding: 20px;
   font-style: italic;
-  color: #666;
+  color: #95a5a6;
 }
 
 .no-events-message {
   text-align: center;
   padding: 30px;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-  color: #666;
+  background-color: #34495e;
+  border-radius: 8px;
+  color: #95a5a6;
+  border: 1px solid #4a5a6b;
 }
 </style>
