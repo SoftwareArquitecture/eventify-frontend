@@ -142,11 +142,12 @@ This project is maintained by the AngelDevs-Web team and contributors:
 
 |            **Alumno**            | **Codigo** |
 |:--------------------------------:|:----------:|
-| Fabrizio Alexander Cutiri Agüero | U201914181 |
-| Omar Christian Berrocal Ramirez  | U20201B529 |
-|  Deybbi Anderson Crisanto Calle  | U202120569 |
-|   July Zelmira Paico Calderon    | U20211D760 |
-|     Jean Pierr Aldave Aldave     | U202120005 |
+| Cuya Villegas Rafael Alberto     | U201913495 |
+| Torres Garcia Andrés Alberto     | U202220518 |
+| Berrocal Ramírez Omar Christian  | U20201B529 |
+| Horna Silva Fabio                | U202020229 |
+| Carlos Alvarez Ponce             | U201919386 |
+
 
 ---
 
