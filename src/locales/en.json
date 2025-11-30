@@ -319,5 +319,16 @@
     "sign-in": "Sign In",
     "sign-up": "Sign Up",
     "sign-out": "Sign Out"
+  },
+  "calendar": {
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "previous": "Previous",
+    "next": "Next",
+    "moreEvents": "more events",
+    "noEvents": "No events to display",
+    "loadingEvents": "Loading events..."
   }
 }

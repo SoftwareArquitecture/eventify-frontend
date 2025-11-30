@@ -36,17 +36,17 @@ export default {
         height: '100%', // Usar toda la altura disponible del contenedor flex
         aspectRatio: null, // Eliminar aspect ratio para usar altura fija
         expandRows: true, // Permitir que las filas se expandan
-        locale: 'es',
+        locale: this.$i18n.locale,
         buttonText: {
-          today: 'Hoy',
-          month: 'Mes',
-          week: 'Semana',
-          day: 'Día',
-          prev: 'Anterior',
-          next: 'Siguiente'
+          today: this.$t('calendar.today'),
+          month: this.$t('calendar.month'),
+          week: this.$t('calendar.week'),
+          day: this.$t('calendar.day'),
+          prev: this.$t('calendar.previous'),
+          next: this.$t('calendar.next')
         },
-        moreLinkText: 'más eventos',
-        noEventsText: 'No hay eventos para mostrar',
+        moreLinkText: this.$t('calendar.moreEvents'),
+        noEventsText: this.$t('calendar.noEvents'),
         eventDisplay: 'block',
         displayEventTime: false,
         // Forzar renderizado de eventos
@@ -67,7 +67,32 @@ export default {
     await this.loadEvents();
   },
 
+  watch: {
+    '$i18n.locale'() {
+      this.updateCalendarLocale();
+    }
+  },
+
   methods: {
+    updateCalendarLocale() {
+      this.calendarOptions.locale = this.$i18n.locale;
+      this.calendarOptions.buttonText = {
+        today: this.$t('calendar.today'),
+        month: this.$t('calendar.month'),
+        week: this.$t('calendar.week'),
+        day: this.$t('calendar.day'),
+        prev: this.$t('calendar.previous'),
+        next: this.$t('calendar.next')
+      };
+      this.calendarOptions.moreLinkText = this.$t('calendar.moreEvents');
+      this.calendarOptions.noEventsText = this.$t('calendar.noEvents');
+
+      // Forzar re-renderizado del calendario
+      this.$nextTick(() => {
+        this.forceCalendarRefresh();
+      });
+    },
+
     async loadEvents() {
       this.loading = true;
       try {
@@ -238,7 +263,7 @@ export default {
   <div class="calendar-wrapper" :class="{ 'loading': loading }">
     <div v-if="loading" class="loading-overlay">
       <i class="pi pi-spinner pi-spin"></i>
-      <span>Cargando eventos...</span>
+      <span>{{ $t('calendar.loadingEvents') }}</span>
     </div>
 
     <FullCalendar
