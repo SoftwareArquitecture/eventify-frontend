@@ -48,9 +48,9 @@ export default {
 
         // Actividad reciente simulada
         this.recentActivity = [
-          { type: 'event', message: 'Nuevo evento creado', time: '2 horas', icon: 'pi-star', color: '#4ECDC4' },
-          { type: 'task', message: 'Tarea completada', time: '5 horas', icon: 'pi-check', color: '#27ae60' },
-          { type: 'quote', message: 'Cotización enviada', time: '1 día', icon: 'pi-dollar', color: '#f39c12' }
+          { type: 'event', messageKey: 'activity.newEventCreated', time: '2', timeUnit: 'hours', icon: 'pi-star', color: '#4ECDC4' },
+          { type: 'task', messageKey: 'activity.taskCompleted', time: '5', timeUnit: 'hours', icon: 'pi-check', color: '#27ae60' },
+          { type: 'quote', messageKey: 'activity.quoteSent', time: '1', timeUnit: 'day', icon: 'pi-dollar', color: '#f39c12' }
         ];
 
       } catch (error) {
@@ -62,11 +62,23 @@ export default {
 
     formatDate(dateString) {
       const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES', {
+      const locale = this.$i18n.locale === 'es' ? 'es-ES' : 'en-US';
+      return date.toLocaleDateString(locale, {
         weekday: 'short',
         month: 'short',
         day: 'numeric'
       });
+    },
+
+    getActivityMessage(messageKey) {
+      return this.$t(messageKey);
+    },
+
+    getActivityTime(time, timeUnit) {
+      const unitKey = time === '1' ? `timeUnits.${timeUnit}` : `timeUnits.${timeUnit}`;
+      const unit = this.$t(unitKey);
+      const timeString = `${time} ${unit}`;
+      return this.$t('activity.timeAgo', { time: timeString });
     },
 
     getEventStatusColor(status) {
@@ -208,8 +220,8 @@ export default {
               <i :class="`pi ${activity.icon}`" :style="{ color: activity.color }"></i>
             </div>
             <div class="activity-content">
-              <p class="activity-message">{{ activity.message }}</p>
-              <span class="activity-time">Hace {{ activity.time }}</span>
+              <p class="activity-message">{{ getActivityMessage(activity.messageKey) }}</p>
+              <span class="activity-time">{{ getActivityTime(activity.time, activity.timeUnit) }}</span>
             </div>
           </div>
         </div>

@@ -330,5 +330,17 @@
     "moreEvents": "more events",
     "noEvents": "No events to display",
     "loadingEvents": "Loading events..."
+  },
+  "activity": {
+    "newEventCreated": "New event created",
+    "taskCompleted": "Task completed",
+    "quoteSent": "Quote sent",
+    "timeAgo": "{time} ago"
+  },
+  "timeUnits": {
+    "hours": "hours",
+    "hour": "hour",
+    "days": "days",
+    "day": "day"
   }
 }

@@ -330,5 +330,17 @@
     "moreEvents": "más eventos",
     "noEvents": "No hay eventos para mostrar",
     "loadingEvents": "Cargando eventos..."
+  },
+  "activity": {
+    "newEventCreated": "Nuevo evento creado",
+    "taskCompleted": "Tarea completada",
+    "quoteSent": "Cotización enviada",
+    "timeAgo": "Hace {time}"
+  },
+  "timeUnits": {
+    "hours": "horas",
+    "hour": "hora",
+    "days": "días",
+    "day": "día"
   }
 }
