@@ -91,7 +91,8 @@
     "actions": "Acciones",
     "search": "Buscar...",
     "success": "Éxito",
-    "error": "Error"
+    "error": "Error",
+    "loading": "Cargando..."
   },
   "profile": {
     "profilePhoto": "Foto de perfil",
