@@ -4,11 +4,10 @@ import CalendarViewComponent from "../events/pages/calendar-view.component.vue";
 import QuoteOrderManagementComponent from "../quote-management/pages/quote-order-management.component.vue";
 import ProfileComponent from "../public/pages/profile.component.vue";
 import EventPageComponent from "../event-management/pages/event-page.component.vue";
+import TaskManagementComponent from "../task-management/pages/task-management.component.vue";
 import {authenticationGuard} from "../iam/services/authentication.guard.js";
 import SignInComponent from "../iam/pages/sign-in.component.vue";
 import SignUpComponent from "../iam/pages/sign-up.component.vue";
-
-const TaskManagementComponent = () => import('../task-management/pages/task-management.component.vue');
 
 const routes = [
     { path: '/sign-in', name: 'sign-in', component: SignInComponent, meta: { title: 'Sign-In' } },
