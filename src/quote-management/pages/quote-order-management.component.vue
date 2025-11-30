@@ -67,8 +67,6 @@ export default {
       // Obtener los serviceItems asociados al quoteOrder
       const response = await serviceItemService.getByQuoteOrderId(id);
       this.serviceItemsForQuoteOrderSelected = response.data.map(serviceItem => new ServiceItem(serviceItem));
-
-      //console.log(this.serviceItemsForQuoteOrderSelected);
     },
     deleteQuoteOrder(id){
       let serviceItemService = new ServiceItemService();
@@ -106,10 +104,9 @@ export default {
 
     this.quoteOrderService.getAll(this.organizerId).then((response)=>{
       this.quoteOrderList=response.data.map(quote => new Quote(quote));
-      console.log(this.quoteOrderList);
-    }).catch((error)=>{console.log(error)})
-
-    console.log(this.quoteOrderList);
+    }).catch((error)=>{
+      if (import.meta.env.DEV) console.error('Error loading quotes:', error);
+    })
   }
 }
 </script>
@@ -144,21 +141,21 @@ export default {
 
     <div>
       <pv-data-table paginator :value="quoteOrderList" :rows="5" class="pl-5 pr-5 mt-5" :filters="filters">
-        <pv-column field="title" header="Title"></pv-column>
-        <pv-column field="eventType" header="Event Type"></pv-column>
-        <pv-column field="eventDate" header="Date">
+        <pv-column field="title" :header="$t('quoteOrder.title')"></pv-column>
+        <pv-column field="eventType" :header="$t('quoteOrder.eventType')"></pv-column>
+        <pv-column field="eventDate" :header="$t('quoteOrder.eventDate')">
           <template #body="slotProps">{{formatDate(new Date(slotProps.data.eventDate))}}</template>
         </pv-column>
-        <pv-column field="location" header="Location"></pv-column>
-        <pv-column field="totalPrice" header="Total Price">
+        <pv-column field="location" :header="$t('quoteOrder.location')"></pv-column>
+        <pv-column field="totalPrice" :header="$t('serviceItem.totalPrice')">
           <template #body="slotProps">S/ {{slotProps.data.totalPrice}}</template>
         </pv-column>
-        <pv-column field="status" header="Status">
+        <pv-column field="status" :header="$t('quoteOrder.state')">
           <template #body="slotProps">
             <pv-tag :value="slotProps.data.status" :severity="getSeverity(slotProps.data.status)"></pv-tag>
           </template>
         </pv-column>
-        <pv-column field="actions" header="Actions">
+        <pv-column field="actions" :header="$t('common.actions')">
           <template #body="slotProps">
             <div class="flex">
               <pv-button type="button" class="bg-blue-500 mr-2" @click="updateQuoteOrder(slotProps.data.id) "><i class="pi pi-pencil"></i></pv-button>

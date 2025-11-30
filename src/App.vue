@@ -28,6 +28,9 @@ export default {
 
 <template>
   <div class="app-wrapper">
+    <!-- Toast global para notificaciones -->
+    <pv-toast />
+
     <!-- Solo mostrar header si NO es página de autenticación -->
     <header-content
       v-if="!isAuthPage"

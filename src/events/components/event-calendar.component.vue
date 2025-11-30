@@ -22,7 +22,7 @@ export default {
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         initialView: 'dayGridMonth',
-        initialDate: '2025-10-01', // Forzar a octubre 2025
+        initialDate: new Date().toISOString().split('T')[0], // Fecha actual
         editable: true,
         selectable: true,
         selectMirror: true,

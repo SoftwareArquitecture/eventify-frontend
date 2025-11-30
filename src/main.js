@@ -63,7 +63,7 @@ async function initAuth() {
         const { useAuthenticationStore } = await import('./iam/services/authentication.store.js')
         const authStore = useAuthenticationStore()
         authStore.initializeAuth()
-        console.log('Authentication initialized')
+        if (import.meta.env.DEV) console.log('Authentication initialized')
     } catch (error) {
         console.warn('Authentication not available:', error.message)
         // Continue without auth - app should still work
@@ -75,7 +75,7 @@ async function initApp() {
     try {
         await initAuth()
         app.mount('#app')
-        console.log('Eventify Platform loaded successfully')
+        if (import.meta.env.DEV) console.log('Eventify Platform loaded successfully')
     } catch (error) {
         console.error('Failed to initialize app:', error)
         // Mount app anyway to show error state

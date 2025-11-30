@@ -148,19 +148,19 @@ watch(
           <div class="contact-row">
             <div class="contact-label">{{ $t('profile.emailAddress') }}</div>
             <div class="contact-value" v-if="!isEditing">{{ email }}</div>
-            <input v-else v-model="profile.email" placeholder="Email" />
+            <input v-else v-model="profile.email" :placeholder="$t('profile.emailAddress')" />
           </div>
 
           <div class="contact-row">
             <div class="contact-label">{{ $t('profile.phoneNumber') }}</div>
             <div class="contact-value" v-if="!isEditing">{{ phone }}</div>
-            <input v-else v-model="profile.phone" placeholder="Phone" />
+            <input v-else v-model="profile.phone" :placeholder="$t('profile.phoneNumber')" />
           </div>
 
           <div class="contact-row">
             <div class="contact-label">{{ $t('profile.location') }}</div>
             <div class="contact-value" v-if="!isEditing">{{ location }}</div>
-            <input v-else v-model="profile.location" placeholder="Location" />
+            <input v-else v-model="profile.location" :placeholder="$t('profile.location')" />
           </div>
 
           <div class="contact-row">
@@ -168,7 +168,7 @@ watch(
             <div class="contact-value" v-if="!isEditing">
               <a :href="website" class="website-link">{{ website }}</a>
             </div>
-            <input v-else v-model="profile.webSite" placeholder="Website" />
+            <input v-else v-model="profile.webSite" :placeholder="$t('profile.website')" />
           </div>
         </div>
       </div>
@@ -176,16 +176,16 @@ watch(
       <div class="about-section">
         <h3 class="section-title">{{ $t('profile.aboutMe') }}</h3>
         <p class="about-text" v-if="!isEditing">{{ bio }}</p>
-        <textarea v-else v-model="profile.biography" placeholder="Biography"></textarea>
+        <textarea v-else v-model="profile.biography" :placeholder="$t('profile.aboutMe')"></textarea>
       </div>
 
       <div style="margin-top:2rem;">
-        <button v-if="!isEditing" @click="isEditing = true">Edit</button>
-        <button v-else @click="saveProfile" :disabled="loading">Save</button>
-        <button v-if="isEditing" @click="cancelEdit" :disabled="loading">Cancel</button>
+        <button v-if="!isEditing" @click="isEditing = true">{{ $t('common.edit') }}</button>
+        <button v-else @click="saveProfile" :disabled="loading">{{ $t('common.save') }}</button>
+        <button v-if="isEditing" @click="cancelEdit" :disabled="loading">{{ $t('common.cancel') }}</button>
         <div v-if="error" style="color:red; margin-top:0.5rem;">{{ error }}</div>
         <div v-if="success" style="color:green; margin-top:0.5rem;">{{ success }}</div>
-        <div v-if="loading" style="margin-top:0.5rem;">Saving...</div>
+        <div v-if="loading" style="margin-top:0.5rem;">{{ $t('common.saving') }}</div>
       </div>
     </div>
   </div>

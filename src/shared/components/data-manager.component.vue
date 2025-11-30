@@ -155,17 +155,17 @@ export default {
 </script>
 
 <template>
-  <h3>Manage {{ title.plural }}</h3>
+  <h3>{{ $t('common.manage', { item: title.plural }) }}</h3>
 
   <!-- Toolbar Section -->
   <pv-toolbar class="mb-4">
     <template #start>
-      <pv-button class="mr-2" icon="pi pi-plus" label="New" severity="success" @click="newItem"/>
-      <pv-button :disabled="!selectedItems || !selectedItems.length" icon="pi pi-trash" label="Delete" severity="danger"
+      <pv-button class="mr-2" icon="pi pi-plus" :label="$t('common.new')" severity="success" @click="newItem"/>
+      <pv-button :disabled="!selectedItems || !selectedItems.length" icon="pi pi-trash" :label="$t('common.delete')" severity="danger"
                  @click="confirmDeleteSelected"/>
     </template>
     <template #end>
-      <pv-button icon="pi pi-download" label="Export" severity="help" @click="exportToCsv($event)"/>
+      <pv-button icon="pi pi-download" :label="$t('common.export')" severity="help" @click="exportToCsv($event)"/>
     </template>
   </pv-toolbar>
 

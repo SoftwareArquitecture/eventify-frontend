@@ -54,21 +54,23 @@ export const useAuthenticationStore = defineStore('authentication',{
             const token = localStorage.getItem('token');
             const userId = localStorage.getItem('userId');
             const username = localStorage.getItem('username');
-            
-            console.log('🔄 Initializing authentication state:', {
-                hasToken: !!token,
-                hasUserId: !!userId,
-                hasUsername: !!username,
-                tokenPreview: token ? token.substring(0, 20) + '...' : 'No token'
-            });
-            
+
+            if (import.meta.env.DEV) {
+                console.log('🔄 Initializing authentication state:', {
+                    hasToken: !!token,
+                    hasUserId: !!userId,
+                    hasUsername: !!username,
+                    tokenPreview: token ? token.substring(0, 20) + '...' : 'No token'
+                });
+            }
+
             if (token && userId && username) {
                 this.signedIn = true;
                 this.userId = parseInt(userId);
                 this.username = username;
-                console.log('✅ Authentication state restored from localStorage');
+                if (import.meta.env.DEV) console.log('✅ Authentication state restored from localStorage');
             } else {
-                console.log('⚠️ Incomplete authentication data in localStorage, staying signed out');
+                if (import.meta.env.DEV) console.log('⚠️ Incomplete authentication data in localStorage, staying signed out');
             }
         },
         /**
@@ -83,25 +85,27 @@ export const useAuthenticationStore = defineStore('authentication',{
          */
         async signIn(signInRequest, router) {
             try {
-                console.log('🔐 Attempting sign-in for user:', signInRequest.username);
+                if (import.meta.env.DEV) console.log('🔐 Attempting sign-in for user:', signInRequest.username);
                 const response = await authenticationService.signIn(signInRequest);
                 let signInResponse = new SignInResponse(response.data.id, response.data.username, response.data.token);
-                
+
                 this.signedIn = true;
                 this.userId = signInResponse.id;
                 this.username = signInResponse.username;
-                
+
                 // Guardar en localStorage
                 localStorage.setItem('token', signInResponse.token);
                 localStorage.setItem('userId', signInResponse.id.toString());
                 localStorage.setItem('username', signInResponse.username);
-                
-                console.log('✅ Sign-in successful:', {
-                    userId: signInResponse.id,
-                    username: signInResponse.username,
-                    tokenPreview: signInResponse.token.substring(0, 20) + '...'
-                });
-                
+
+                if (import.meta.env.DEV) {
+                    console.log('✅ Sign-in successful:', {
+                        userId: signInResponse.id,
+                        username: signInResponse.username,
+                        tokenPreview: signInResponse.token.substring(0, 20) + '...'
+                    });
+                }
+
                 // Redirigir a Events después del login exitoso
                 router.push({ name: 'Events' });
             } catch (error) {
@@ -120,11 +124,11 @@ export const useAuthenticationStore = defineStore('authentication',{
          */
         async signUp(signUpdRequest, router) {
             try {
-                console.log('📝 Attempting sign-up for user:', signUpdRequest.username);
+                if (import.meta.env.DEV) console.log('📝 Attempting sign-up for user:', signUpdRequest.username);
                 const response = await authenticationService.signUp(signUpdRequest);
                 let signUpResponse = new SignUpResponse(response.data.message);
                 router.push({ name: 'sign-in' });
-                console.log('✅ Sign-up successful:', signUpResponse);
+                if (import.meta.env.DEV) console.log('✅ Sign-up successful:', signUpResponse);
             } catch (error) {
                 console.error('❌ Sign-up error:', error.response?.data || error.message);
                 router.push({ name: 'sign-up' });
@@ -140,18 +144,18 @@ export const useAuthenticationStore = defineStore('authentication',{
          * @param router - Vue router instance
          */
         async signOut(router) {
-            console.log('🚪 Signing out user:', this.username);
-            
+            if (import.meta.env.DEV) console.log('🚪 Signing out user:', this.username);
+
             this.signedIn = false;
             this.userId = 0;
             this.username = '';
-            
+
             // Limpiar localStorage
             localStorage.removeItem('token');
             localStorage.removeItem('userId');
             localStorage.removeItem('username');
-            
-            console.log('✅ Signed out successfully');
+
+            if (import.meta.env.DEV) console.log('✅ Signed out successfully');
             router.push({ name: 'sign-in' });
         }
     }

@@ -184,6 +184,12 @@ export default {
             userId: this.eventData.userId
           };
           this.$emit('event-created', newEvent);
+          this.$toast.add({
+            severity: 'success',
+            summary: this.$t('common.success'),
+            detail: this.isEdit ? 'Evento actualizado correctamente' : 'Evento creado correctamente',
+            life: 3000
+          });
         }
 
         this.$emit('close-dialog');
@@ -191,7 +197,12 @@ export default {
       } catch (error) {
         console.error('Error saving event:', error);
         // Mostrar el error al usuario
-        alert('Error al guardar el evento. Por favor, inténtalo de nuevo.');
+        this.$toast.add({
+          severity: 'error',
+          summary: this.$t('common.error'),
+          detail: 'Error al guardar el evento. Por favor, inténtalo de nuevo.',
+          life: 3000
+        });
       } finally {
         this.loading = false;
       }

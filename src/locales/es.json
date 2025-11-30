@@ -62,9 +62,36 @@
       "services": "Servicios"
     }
   },
+  "home": {
+    "welcome": "¡Bienvenido a Eventify! 🎉",
+    "subtitle": "Tu centro de control para eventos y cotizaciones",
+    "summary": "Resumen",
+    "upcomingEvents": "Eventos Próximos",
+    "pendingTasks": "Tareas Pendientes",
+    "pendingQuotes": "Cotizaciones Pendientes",
+    "completedEvents": "Eventos Completados",
+    "promoTitle": "🌟 Optimiza tu gestión de eventos",
+    "promoText": "Descubre todas las herramientas que Eventify tiene para ofrecerte",
+    "upcomingEventsTitle": "📅 Próximos Eventos",
+    "noEvents": "No hay eventos próximos programados",
+    "createFirstEvent": "Crear primer evento",
+    "recentActivityTitle": "🔔 Actividad Reciente"
+  },
   "common": {
     "retry": "Reintentar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "edit": "Editar",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "new": "Nuevo",
+    "export": "Exportar",
+    "manage": "Gestionar {item}",
+    "actions": "Acciones",
+    "search": "Buscar...",
+    "success": "Éxito",
+    "error": "Error"
   },
   "profile": {
     "profilePhoto": "Foto de perfil",

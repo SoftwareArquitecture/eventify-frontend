@@ -90,21 +90,21 @@ export default {
   <div class="home-container">
     <!-- Header de bienvenida más compacto -->
     <div class="welcome-section">
-      <h1 class="welcome-title">¡Bienvenido a Eventify! 🎉</h1>
-      <p class="welcome-subtitle">Tu centro de control para eventos y cotizaciones</p>
+      <h1 class="welcome-title">{{ $t('home.welcome') }}</h1>
+      <p class="welcome-subtitle">{{ $t('home.subtitle') }}</p>
     </div>
 
     <!-- Loading state -->
     <div v-if="loading" class="loading-section">
       <i class="pi pi-spinner pi-spin"></i>
-      <span>Cargando dashboard...</span>
+      <span>{{ $t('common.loading') || 'Cargando...' }}</span>
     </div>
 
     <!-- Dashboard content -->
     <div v-else class="dashboard-grid">
       <!-- Estadísticas principales -->
       <div class="stats-section">
-        <h2 class="section-title">📊 Resumen</h2>
+        <h2 class="section-title">📊 {{ $t('home.summary') }}</h2>
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-icon" style="background-color: rgba(78, 205, 196, 0.1);">
@@ -112,7 +112,7 @@ export default {
             </div>
             <div class="stat-content">
               <span class="stat-number">{{ stats.upcomingEvents }}</span>
-              <span class="stat-label">Eventos Próximos</span>
+              <span class="stat-label">{{ $t('home.upcomingEvents') }}</span>
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export default {
             </div>
             <div class="stat-content">
               <span class="stat-number">{{ stats.pendingTasks }}</span>
-              <span class="stat-label">Tareas Pendientes</span>
+              <span class="stat-label">{{ $t('home.pendingTasks') }}</span>
             </div>
           </div>
 
@@ -132,7 +132,7 @@ export default {
             </div>
             <div class="stat-content">
               <span class="stat-number">{{ stats.pendingQuotes }}</span>
-              <span class="stat-label">Cotizaciones Pendientes</span>
+              <span class="stat-label">{{ $t('home.pendingQuotes') }}</span>
             </div>
           </div>
 
@@ -142,7 +142,7 @@ export default {
             </div>
             <div class="stat-content">
               <span class="stat-number">{{ stats.completedEvents }}</span>
-              <span class="stat-label">Eventos Completados</span>
+              <span class="stat-label">{{ $t('home.completedEvents') }}</span>
             </div>
           </div>
         </div>
@@ -152,8 +152,8 @@ export default {
       <div class="promo-banner">
         <div class="banner-content">
           <div class="banner-text">
-            <h3>🌟 Optimiza tu gestión de eventos</h3>
-            <p>Descubre todas las herramientas que Eventify tiene para ofrecerte</p>
+            <h3>{{ $t('home.promoTitle') }}</h3>
+            <p>{{ $t('home.promoText') }}</p>
           </div>
           <div class="banner-image">
             <div class="banner-icon">
@@ -165,12 +165,12 @@ export default {
 
       <!-- Eventos próximos -->
       <div class="upcoming-events">
-        <h2 class="section-title">📅 Próximos Eventos</h2>
+        <h2 class="section-title">{{ $t('home.upcomingEventsTitle') }}</h2>
         <div v-if="upcomingEvents.length === 0" class="empty-state">
           <i class="pi pi-calendar"></i>
-          <p>No hay eventos próximos programados</p>
+          <p>{{ $t('home.noEvents') }}</p>
           <button @click="navigateTo('/events')" class="create-event-btn">
-            Crear primer evento
+            {{ $t('home.createFirstEvent') }}
           </button>
         </div>
         <div v-else class="events-list">
@@ -197,7 +197,7 @@ export default {
 
       <!-- Actividad reciente -->
       <div class="recent-activity">
-        <h2 class="section-title">🔔 Actividad Reciente</h2>
+        <h2 class="section-title">{{ $t('home.recentActivityTitle') }}</h2>
         <div class="activity-list">
           <div
             v-for="(activity, index) in recentActivity"
