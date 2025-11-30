@@ -6,17 +6,24 @@ export default {
   components: {PvSelectButton},
   data() {
     return {
-      languages: []
+      languages: [],
+      selectedLocale: 'en'
     }
   },
   created() {
     this.languages = this.$i18n.availableLocales;
+    this.selectedLocale = this.$i18n.locale;
+  },
+  watch: {
+    selectedLocale(newLocale) {
+      this.$i18n.locale = newLocale;
+    }
   }
 }
 </script>
 
 <template>
-  <pv-select-button v-model="$i18n.locale" :options="languages">
+  <pv-select-button v-model="selectedLocale" :options="languages">
     <template #option="slotProps">
       {{ slotProps.option.toUpperCase() }}
     </template>
