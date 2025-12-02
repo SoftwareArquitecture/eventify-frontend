@@ -17,6 +17,7 @@ export default {
   watch: {
     selectedLocale(newLocale) {
       this.$i18n.locale = newLocale;
+      localStorage.setItem('locale', newLocale);
     }
   }
 }

@@ -189,7 +189,7 @@ export default {
 
 <template>
 
-  <pv-dialog v-bind:visible="visible" modal @hide="$emit('hide')">
+  <pv-dialog v-bind:visible="visible" modal :closable="true" @update:visible="onCancel">
 
     <div class="flex flex-column p-4 quote-container">
 

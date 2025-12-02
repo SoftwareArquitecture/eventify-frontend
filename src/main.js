@@ -54,7 +54,8 @@ app.use(pinia)
     .component('pv-select',Select)
     .component('pv-divider',Divider)
     .component('pv-textarea', Textarea)
-    .component('pv-dropdown', AutoComplete)
+    .component('pv-dropdown', Select)
+    .component('pv-autocomplete', AutoComplete)
     .component('pv-tag',Tag)
 
 // Initialize authentication with error handling

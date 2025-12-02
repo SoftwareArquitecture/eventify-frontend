@@ -1,5 +1,4 @@
-// Servicio para obtener datos de perfil desde la API real
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import httpInstance from './http.instance.js';
 
 export default {
     /**
@@ -9,28 +8,37 @@ export default {
      */
     async getProfileData(profileId = 1) {
         try {
-            console.log(`Fetching profile with ID: ${profileId}`);
+            console.log(`📊 Fetching profile with ID: ${profileId}`);
+            console.log(`🔑 Token in localStorage: ${localStorage.getItem('token') ? 'YES' : 'NO'}`);
 
-            const response = await fetch(`${API_URL}/profiles/${profileId}`);
-            if (!response.ok) {
-                throw new Error(`Error fetching profile: ${response.status}`);
-            }
+            const response = await httpInstance.get(`/profiles/${profileId}`);
+            const profile = response.data;
 
-            const profile = await response.json();
+            console.log('✅ Profile data loaded successfully:', profile);
 
             return {
                 user: {
-                    name: profile.fullName,
-                    email: profile.email,
-                    location: profile.streetAddress,
-                    title: profile.role,
-                    profileImage: null
+                    name: profile.fullName || '',
+                    email: profile.email || '',
+                    location: profile.streetAddress || '',
+                    title: profile.role || '',
+                    phone: profile.phoneNumber || '',
+                    website: profile.website || '',
+                    bio: profile.bio || '',
+                    profileImage: profile.profileImage || null
                 },
-                statistics: {},
+                statistics: {
+                    completedEvents: 0,
+                    sentQuotes: 0,
+                    servedCustomers: 0,
+                    averageRating: 0
+                },
                 certifications: { list: [] }
             };
         } catch (error) {
-            console.error('Error fetching profile data:', error);
+            console.error('❌ Error fetching profile data:', error);
+            console.error('❌ Error status:', error.response?.status);
+            console.error('❌ Error message:', error.response?.data);
             throw error;
         }
     }

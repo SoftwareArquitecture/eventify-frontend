@@ -20,41 +20,78 @@
     "certifications": "Certifications",
     "settings": "Settings"
   },
-  "iam": {
-    "auth": {
-      "signIn": {
-        "title": "Sign In",
-        "subtitle": "Access your Eventify account",
-        "username": "Username",
-        "password": "Password",
-        "button": "Sign In",
-        "loading": "Signing in...",
-        "noAccount": "Don't have an account?",
-        "createAccount": "Create new account"
-      },
-      "signUp": {
-        "title": "Create Account",
-        "subtitle": "Join Eventify Platform",
-        "username": "Username",
-        "password": "Password",
-        "confirmPassword": "Confirm Password",
-        "button": "Create Account",
-        "loading": "Creating account...",
-        "hasAccount": "Already have an account?",
-        "signIn": "Sign in"
-      },
-      "errors": {
-        "invalidCredentials": "Invalid username or password",
-        "passwordMismatch": "Passwords do not match",
-        "userExists": "Username already exists",
-        "networkError": "Network error. Please try again."
-      }
+  "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "subtitle": "Access your Eventify account",
+      "username": "Username",
+      "password": "Password",
+      "button": "Sign In",
+      "loading": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create new account"
+    },
+    "signUp": {
+      "title": "Create Account",
+      "subtitle": "Join Eventify Platform",
+      "requiredFields": "Required Information",
+      "optionalFields": "Optional Information (recommended)",
+      "username": "Username",
+      "usernamePlaceholder": "Enter your username",
+      "usernameRequired": "Username is required",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password (min. 8 characters)",
+      "passwordRequired": "Password is required",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "firstNameRequired": "First name is required",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "lastNameRequired": "Last name is required",
+      "email": "Email",
+      "emailPlaceholder": "example{'@'}email.com",
+      "emailRequired": "Email is required",
+      "phoneNumber": "Phone Number",
+      "phoneNumberPlaceholder": "+1234567890",
+      "phoneNumberRequired": "Phone number is required",
+      "role": "Role",
+      "rolePlaceholder": "Select your role",
+      "roleRequired": "Role is required",
+      "roleOrganizer": "Event Organizer",
+      "roleHoster": "Event Hoster",
+      "street": "Street",
+      "streetPlaceholder": "Main Street",
+      "number": "Number",
+      "numberPlaceholder": "123",
+      "city": "City",
+      "cityPlaceholder": "New York",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "10001",
+      "country": "Country",
+      "countryPlaceholder": "United States",
+      "webSite": "Website",
+      "webSitePlaceholder": "https://yourwebsite.com",
+      "biography": "Biography",
+      "biographyPlaceholder": "Tell us about yourself or your business...",
+      "createAccount": "Create Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "button": "Create Account",
+      "loading": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid username or password",
+      "passwordMismatch": "Passwords do not match",
+      "userExists": "Username already exists",
+      "networkError": "Network error. Please try again."
     }
   },
   "profilePage": {
     "title": "My Profile",
     "loading": "Loading profile information...",
-    "errorLoading": "Failed to load profile data. Please make sure JSON Server is running.",
+    "errorLoading": "Failed to load profile data. Please try again later.",
     "tabs": {
       "information": "Information",
       "albums": "Albums",
@@ -147,7 +184,7 @@
     "cancel": "Cancel",
     "deleting": "Deleting...",
     "delete": "Delete",
-    "errorLoading": "Failed to load albums. Please make sure JSON Server is running.",
+    "errorLoading": "Failed to load albums. Please try again later.",
     "invalidDate": "Invalid date",
     "viewAlbumFuture": "View album functionality will be implemented in the future",
     "saveError": "Failed to save album.",
@@ -255,7 +292,12 @@
     "column-1": "Tasks",
     "column-2": "To Do",
     "column-3": "In Progress",
-    "column-4": "Completed"
+    "column-4": "Completed",
+    "loadingBoard": "Loading board...",
+    "errorLoadingBoard": "Could not load the board. Please try again later.",
+    "retry": "Retry",
+    "noTitle": "(No title)",
+    "noDescription": "(No description)"
   },
   "commonTask": {
     "required": "is required"

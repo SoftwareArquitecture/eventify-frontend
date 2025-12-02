@@ -103,7 +103,7 @@ import CertificationsList from '../../profile-management/components/certificatio
 import AlbumsPageComponent from '../../profile-management/components/album-display.component.vue';
 import ReviewsComponent from '../../profile-management/components/reviews.component.vue';
 import ServicesComponent from '../../profile-management/components/services.component.vue';
-//import ProfileSettingsPageComponent from '../../profile-management/components/profile-settings-page.component.vue';
+import { useAuthenticationStore } from '../../iam/services/authentication.store.js';
 import profileService from '../../shared/services/profile.service.js';
 export default {
   // Accept id as a prop so router can provide the dynamic profile id
@@ -121,13 +121,12 @@ export default {
     AlbumsPageComponent,
     ReviewsComponent,
     ServicesComponent,
-    //ProfileSettingsPageComponent
   },
   data() {
     return {
       loading: true,
       error: null,
-      profileId: 1,
+      profileId: null,
       activeTab: 'information',
       tabs: [
         { id: 'information', labelKey: 'profilePage.tabs.information' },
@@ -152,10 +151,15 @@ export default {
     };
   },
   created() {
-    // Use the id prop if provided, otherwise fall back to the route param
+    const authStore = useAuthenticationStore();
+
+    // Use the id prop if provided, otherwise fall back to the route param, otherwise use current user
     const routeId = this.id ?? this.$route.params.id;
     if (routeId) {
       this.profileId = parseInt(routeId);
+    } else {
+      // Use the current authenticated user's ID
+      this.profileId = authStore.currentUserId;
     }
     this.loadProfileData();
 
@@ -179,7 +183,18 @@ export default {
         this.loading = false;
       } catch (error) {
         console.error('Error loading profile data:', error);
-        this.error = this.$t('profilePage.errorLoading');
+
+        // Mensaje más específico según el tipo de error
+        if (error.response?.status === 500) {
+          this.error = 'Server error. The profile may not exist in the database yet.';
+        } else if (error.response?.status === 404) {
+          this.error = 'Profile not found. Please create a profile first.';
+        } else if (error.response?.status === 401) {
+          this.error = 'Authentication error. Please sign in again.';
+        } else {
+          this.error = this.$t('profilePage.errorLoading');
+        }
+
         this.loading = false;
       }
     }
@@ -193,7 +208,8 @@ export default {
     },
     // React when the route id changes (e.g., user navigates to another profile)
     '$route.params.id'(newId) {
-      const parsed = newId ? parseInt(newId) : 1;
+      const authStore = useAuthenticationStore();
+      const parsed = newId ? parseInt(newId) : authStore.currentUserId;
       if (parsed !== this.profileId) {
         this.profileId = parsed;
         this.loadProfileData();
@@ -201,7 +217,8 @@ export default {
     },
     // Also react if the id prop changes directly via router props
     id(newId) {
-      const parsed = newId ? parseInt(newId) : 1;
+      const authStore = useAuthenticationStore();
+      const parsed = newId ? parseInt(newId) : authStore.currentUserId;
       if (parsed !== this.profileId) {
         this.profileId = parsed;
         this.loadProfileData();

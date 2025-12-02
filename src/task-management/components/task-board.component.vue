@@ -28,7 +28,7 @@ export default {
       this.loading = false;
     } catch (error) {
       console.error('Error cargando el tablero:', error);
-      this.error = 'No se pudo cargar el tablero. Por favor, inténtalo de nuevo más tarde.';
+      this.error = this.$t('tasks.errorLoadingBoard');
       this.loading = false;
     }
   },
@@ -126,13 +126,13 @@ export default {
 
     <!-- Estado de carga -->
     <div v-if="loading" class="loading-state">
-      <p>Cargando tablero...</p>
+      <p>{{ $t('tasks.loadingBoard') }}</p>
     </div>
 
     <!-- Mensaje de error -->
     <div v-else-if="error" class="error-state">
       <p>{{ error }}</p>
-      <pv-button label="Reintentar" @click="created" />
+      <pv-button :label="$t('tasks.retry')" @click="created" />
     </div>
 
     <!-- Tablero cargado correctamente -->

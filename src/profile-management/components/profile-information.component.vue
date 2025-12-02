@@ -33,7 +33,6 @@ function adaptProfile(response) {
     name,
     lastName,
     title: response.role || '',
-    avatarUrl: response.profileImage || '',
     email: response.email || '',
     phone: response.phoneNumber || '',
     location: response.streetAddress || '',
@@ -110,7 +109,6 @@ const phone = computed(() => profile.value ? profile.value.phone : '');
 const location = computed(() => profile.value ? profile.value.location : '');
 const website = computed(() => profile.value ? profile.value.webSite : '');
 const bio = computed(() => profile.value ? profile.value.biography : '');
-const profileImage = computed(() => profile.value ? profile.value.avatarUrl : 'placeholder');
 
 onMounted(fetchProfile);
 // Load profile when component is mounted or when the id changes
@@ -127,15 +125,6 @@ watch(
 <template>
   <div class="profile-info-container">
     <div class="profile-header">
-      <div class="avatar-container">
-        <div class="avatar-wrapper">
-          <div v-if="!profileImage || profileImage === 'placeholder'" class="avatar-placeholder">
-            {{ $t('profile.profilePhoto') }}
-          </div>
-          <img v-else :src="profileImage" :alt="$t('profile.profilePhoto')" class="profile-avatar" />
-          <div class="avatar-shadow"></div>
-        </div>
-      </div>
       <h2 class="profile-name">{{ name }}</h2>
       <p class="profile-title">{{ title }}</p>
     </div>
@@ -202,64 +191,13 @@ watch(
   align-items: center;
 }
 
-/* Header section with photo and name */
+/* Header section with name */
 .profile-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
   width: 100%;
-}
-
-.avatar-container {
-  margin-bottom: 15px;
-  position: relative;
-}
-
-/* Wrapper for avatar and its shadow */
-.avatar-wrapper {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-}
-
-/* Styles for the profile image */
-.profile-avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  position: relative;
-  z-index: 2;
-}
-
-/* Styles for the placeholder when there is no image */
-.avatar-placeholder {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-color: #e8eeff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #6366f1;
-  font-size: 14px;
-  position: relative;
-  z-index: 2;
-}
-
-/* Shadow effect below the avatar */
-.avatar-shadow {
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 70%);
-  z-index: 1;
-  border-radius: 50%;
-  margin: 0 10px;
 }
 
 .profile-name {

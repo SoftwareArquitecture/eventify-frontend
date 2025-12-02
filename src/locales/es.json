@@ -20,41 +20,78 @@
     "certifications": "Certificaciones",
     "settings": "Configuración"
   },
-  "iam": {
-    "auth": {
-      "signIn": {
-        "title": "Iniciar Sesión",
-        "subtitle": "Accede a tu cuenta de Eventify",
-        "username": "Usuario",
-        "password": "Contraseña",
-        "button": "Iniciar Sesión",
-        "loading": "Iniciando sesión...",
-        "noAccount": "¿No tienes cuenta?",
-        "createAccount": "Crear nueva cuenta"
-      },
-      "signUp": {
-        "title": "Crear Cuenta",
-        "subtitle": "Únete a Eventify Platform",
-        "username": "Usuario",
-        "password": "Contraseña",
-        "confirmPassword": "Confirmar Contraseña",
-        "button": "Crear Cuenta",
-        "loading": "Creando cuenta...",
-        "hasAccount": "¿Ya tienes cuenta?",
-        "signIn": "Iniciar sesión"
-      },
-      "errors": {
-        "invalidCredentials": "Usuario o contraseña inválidos",
-        "passwordMismatch": "Las contraseñas no coinciden",
-        "userExists": "El nombre de usuario ya existe",
-        "networkError": "Error de red. Inténtalo de nuevo."
-      }
+  "auth": {
+    "signIn": {
+      "title": "Iniciar Sesión",
+      "subtitle": "Accede a tu cuenta de Eventify",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "button": "Iniciar Sesión",
+      "loading": "Iniciando sesión...",
+      "noAccount": "¿No tienes cuenta?",
+      "createAccount": "Crear nueva cuenta"
+    },
+    "signUp": {
+      "title": "Crear Cuenta",
+      "subtitle": "Únete a Eventify Platform",
+      "requiredFields": "Información Requerida",
+      "optionalFields": "Información Opcional (recomendada)",
+      "username": "Usuario",
+      "usernamePlaceholder": "Ingresa tu nombre de usuario",
+      "usernameRequired": "El usuario es requerido",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña (mín. 8 caracteres)",
+      "passwordRequired": "La contraseña es requerida",
+      "firstName": "Nombre",
+      "firstNamePlaceholder": "Ingresa tu nombre",
+      "firstNameRequired": "El nombre es requerido",
+      "lastName": "Apellido",
+      "lastNamePlaceholder": "Ingresa tu apellido",
+      "lastNameRequired": "El apellido es requerido",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "ejemplo{'@'}email.com",
+      "emailRequired": "El correo electrónico es requerido",
+      "phoneNumber": "Número de Teléfono",
+      "phoneNumberPlaceholder": "+51987654321",
+      "phoneNumberRequired": "El número de teléfono es requerido",
+      "role": "Rol",
+      "rolePlaceholder": "Selecciona tu rol",
+      "roleRequired": "El rol es requerido",
+      "roleOrganizer": "Organizador de Eventos",
+      "roleHoster": "Anfitrión de Eventos",
+      "street": "Calle",
+      "streetPlaceholder": "Avenida Principal",
+      "number": "Número",
+      "numberPlaceholder": "123",
+      "city": "Ciudad",
+      "cityPlaceholder": "Lima",
+      "postalCode": "Código Postal",
+      "postalCodePlaceholder": "15001",
+      "country": "País",
+      "countryPlaceholder": "Perú",
+      "webSite": "Sitio Web",
+      "webSitePlaceholder": "https://tusitio.com",
+      "biography": "Biografía",
+      "biographyPlaceholder": "Cuéntanos sobre ti o tu negocio...",
+      "createAccount": "Crear Cuenta",
+      "alreadyHaveAccount": "¿Ya tienes cuenta?",
+      "signInLink": "Iniciar sesión",
+      "button": "Crear Cuenta",
+      "loading": "Creando cuenta...",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "signIn": "Iniciar sesión"
+    },
+    "errors": {
+      "invalidCredentials": "Usuario o contraseña inválidos",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "userExists": "El nombre de usuario ya existe",
+      "networkError": "Error de red. Inténtalo de nuevo."
     }
   },
   "profilePage": {
     "title": "Mi Perfil",
     "loading": "Cargando información del perfil...",
-    "errorLoading": "Error al cargar los datos del perfil. Asegúrate de que JSON Server esté ejecutándose.",
+    "errorLoading": "Error al cargar los datos del perfil. Por favor, inténtalo de nuevo más tarde.",
     "tabs": {
       "information": "Información",
       "albums": "Álbumes",
@@ -147,7 +184,7 @@
     "cancel": "Cancelar",
     "deleting": "Eliminando...",
     "delete": "Eliminar",
-    "errorLoading": "Error al cargar álbumes. Asegúrate de que JSON Server esté ejecutándose.",
+    "errorLoading": "Error al cargar álbumes. Por favor, inténtalo de nuevo más tarde.",
     "invalidDate": "Fecha inválida",
     "viewAlbumFuture": "La funcionalidad de ver álbum se implementará en el futuro",
     "saveError": "Error al guardar el álbum.",
@@ -255,7 +292,12 @@
     "column-1": "Tareas",
     "column-2": "Por Hacer",
     "column-3": "En Progreso",
-    "column-4": "Completado"
+    "column-4": "Completado",
+    "loadingBoard": "Cargando tablero...",
+    "errorLoadingBoard": "No se pudo cargar el tablero. Por favor, inténtalo de nuevo más tarde.",
+    "retry": "Reintentar",
+    "noTitle": "(Sin título)",
+    "noDescription": "(Sin descripción)"
   },
   "commonTask": {
     "required": "es requerido"

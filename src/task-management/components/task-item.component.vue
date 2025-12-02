@@ -19,11 +19,11 @@ export default {
     // Asegurarnos de mostrar el título correctamente
     taskTitle() {
       // Acceder directamente a la propiedad title del objeto task
-      return this.task && this.task.title ? this.task.title : '(Sin título)';
+      return this.task && this.task.title ? this.task.title : this.$t('tasks.noTitle');
     },
 
     taskDescription() {
-      return this.task && this.task.description ? this.task.description : '(Sin descripción)';
+      return this.task && this.task.description ? this.task.description : this.$t('tasks.noDescription');
     },
 
     formattedDate() {

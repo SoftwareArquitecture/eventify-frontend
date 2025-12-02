@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import httpInstance from '../../shared/services/http.instance.js';
 
 export default {
     /**
@@ -9,7 +7,7 @@ export default {
      * @returns {Promise<Object>} profile resource
      */
     async getProfileById(profileId) {
-        const response = await axios.get(`${API_URL}/profiles/${profileId}`);
+        const response = await httpInstance.get(`/profiles/${profileId}`);
         return response.data;
     },
 
@@ -19,7 +17,7 @@ export default {
      * @returns {Promise<Object>} created profile resource
      */
     async createProfile(payload) {
-        const response = await axios.post(`${API_URL}/profiles`, payload);
+        const response = await httpInstance.post(`/profiles`, payload);
         return response.data;
     },
 
@@ -30,7 +28,7 @@ export default {
      * @returns {Promise<Object>} updated profile resource
      */
     async updateProfile(profileId, payload) {
-        const response = await axios.put(`${API_URL}/profiles/${profileId}`, payload);
+        const response = await httpInstance.put(`/profiles/${profileId}`, payload);
         return response.data;
     },
 
