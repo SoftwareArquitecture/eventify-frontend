@@ -35,7 +35,7 @@
       "title": "Crear Cuenta",
       "subtitle": "Únete a Eventify Platform",
       "requiredFields": "Información Requerida",
-      "optionalFields": "Información Opcional (recomendada)",
+      "optionalFields": "Información Opcional (puedes completarla después en tu perfil)",
       "username": "Usuario",
       "usernamePlaceholder": "Ingresa tu nombre de usuario",
       "usernameRequired": "El usuario es requerido",
@@ -79,7 +79,8 @@
       "button": "Crear Cuenta",
       "loading": "Creando cuenta...",
       "hasAccount": "¿Ya tienes cuenta?",
-      "signIn": "Iniciar sesión"
+      "signIn": "Iniciar sesión",
+      "successMessage": "¡Cuenta creada exitosamente! Por favor, inicia sesión."
     },
     "errors": {
       "invalidCredentials": "Usuario o contraseña inválidos",
@@ -377,9 +378,12 @@
     "newEventCreated": "Nuevo evento creado",
     "taskCompleted": "Tarea completada",
     "quoteSent": "Cotización enviada",
+    "unknownActivity": "Actividad desconocida",
     "timeAgo": "Hace {time}"
   },
   "timeUnits": {
+    "minutes": "minutos",
+    "minute": "minuto",
     "hours": "horas",
     "hour": "hora",
     "days": "días",

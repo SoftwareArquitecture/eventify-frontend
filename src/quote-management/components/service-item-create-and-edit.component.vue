@@ -58,7 +58,7 @@ export default {
 
 <template>
 
-  <pv-dialog v-bind:visible="visible" modal header="New Service">
+  <pv-dialog v-bind:visible="visible" modal header="New Service" @update:visible="onCancel">
     <div class="ml-4 mr-4">
       <form v-on:submit.prevent="onCreateNewService">
         <div class="flex flex-column form-group">

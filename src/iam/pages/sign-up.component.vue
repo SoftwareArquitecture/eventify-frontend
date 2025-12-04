@@ -30,20 +30,20 @@ export default {
   },
   computed: {
     isFormValid() {
-      return this.username &&
-             this.password &&
-             this.firstName &&
-             this.lastName &&
-             this.email &&
-             this.phoneNumber &&
-             this.role;
+      return this.username && this.password;
     }
   },
   methods: {
-    onSignUp() {
+    async onSignUp() {
       this.submitted = true;
 
       if (!this.isFormValid) {
+        this.$toast.add({
+          severity: 'warn',
+          summary: this.$t('auth.signUp.title'),
+          detail: this.$t('auth.signUp.usernameRequired') + ' & ' + this.$t('auth.signUp.passwordRequired'),
+          life: 3000
+        });
         return;
       }
 
@@ -63,7 +63,24 @@ export default {
         this.webSite,
         this.biography
       );
-      this.authenticationStore.signUp(signUpRequest, this.$router);
+
+      const result = await this.authenticationStore.signUp(signUpRequest, this.$router);
+
+      if (result.success) {
+        this.$toast.add({
+          severity: 'success',
+          summary: this.$t('auth.signUp.title'),
+          detail: this.$t('auth.signUp.successMessage'),
+          life: 3000
+        });
+      } else {
+        this.$toast.add({
+          severity: 'error',
+          summary: this.$t('auth.signUp.title'),
+          detail: result.message,
+          life: 5000
+        });
+      }
     },
     goToSignIn() {
       this.$router.push('/sign-in');
@@ -73,6 +90,7 @@ export default {
 </script>
 
 <template>
+  <pv-toast />
   <div class="auth-container">
     <div class="auth-content">
       <img src="/src/assets/eventify-logo.png" alt="Eventify" class="logo" />
@@ -80,99 +98,85 @@ export default {
       <form @submit.prevent="onSignUp" class="auth-form">
         <h2 class="form-title">{{ $t('auth.signUp.title') }}</h2>
 
-        <!-- Required Fields Section -->
+        <!-- Required Fields -->
+        <div class="field">
+          <label for="username" class="field-label">{{ $t('auth.signUp.username') }} *</label>
+          <pv-input-text
+            id="username"
+            v-model="username"
+            :class="{'p-invalid': submitted && !username}"
+            :placeholder="$t('auth.signUp.usernamePlaceholder')"
+          />
+          <small v-if="submitted && !username" class="p-error">{{ $t('auth.signUp.usernameRequired') }}</small>
+        </div>
+
+        <div class="field">
+          <label for="password" class="field-label">{{ $t('auth.signUp.password') }} *</label>
+          <pv-input-text
+            id="password"
+            v-model="password"
+            :class="{'p-invalid': submitted && !password}"
+            type="password"
+            :placeholder="$t('auth.signUp.passwordPlaceholder')"
+          />
+          <small v-if="submitted && !password" class="p-error">{{ $t('auth.signUp.passwordRequired') }}</small>
+        </div>
+
+        <!-- Optional Fields Section -->
         <div class="form-section">
-          <h3 class="section-title">{{ $t('auth.signUp.requiredFields') }}</h3>
-
-          <div class="field">
-            <label for="username" class="field-label">{{ $t('auth.signUp.username') }} *</label>
-            <pv-input-text
-              id="username"
-              v-model="username"
-              :class="{'p-invalid': submitted && !username}"
-              :placeholder="$t('auth.signUp.usernamePlaceholder')"
-            />
-            <small v-if="submitted && !username" class="p-error">{{ $t('auth.signUp.usernameRequired') }}</small>
-          </div>
-
-          <div class="field">
-            <label for="password" class="field-label">{{ $t('auth.signUp.password') }} *</label>
-            <pv-input-text
-              id="password"
-              v-model="password"
-              :class="{'p-invalid': submitted && !password}"
-              type="password"
-              :placeholder="$t('auth.signUp.passwordPlaceholder')"
-            />
-            <small v-if="submitted && !password" class="p-error">{{ $t('auth.signUp.passwordRequired') }}</small>
-          </div>
+          <h3 class="section-title">{{ $t('auth.signUp.optionalFields') }}</h3>
 
           <div class="field-row">
             <div class="field">
-              <label for="firstName" class="field-label">{{ $t('auth.signUp.firstName') }} *</label>
+              <label for="firstName" class="field-label">{{ $t('auth.signUp.firstName') }}</label>
               <pv-input-text
                 id="firstName"
                 v-model="firstName"
-                :class="{'p-invalid': submitted && !firstName}"
                 :placeholder="$t('auth.signUp.firstNamePlaceholder')"
               />
-              <small v-if="submitted && !firstName" class="p-error">{{ $t('auth.signUp.firstNameRequired') }}</small>
             </div>
 
             <div class="field">
-              <label for="lastName" class="field-label">{{ $t('auth.signUp.lastName') }} *</label>
+              <label for="lastName" class="field-label">{{ $t('auth.signUp.lastName') }}</label>
               <pv-input-text
                 id="lastName"
                 v-model="lastName"
-                :class="{'p-invalid': submitted && !lastName}"
                 :placeholder="$t('auth.signUp.lastNamePlaceholder')"
               />
-              <small v-if="submitted && !lastName" class="p-error">{{ $t('auth.signUp.lastNameRequired') }}</small>
             </div>
           </div>
 
           <div class="field">
-            <label for="email" class="field-label">{{ $t('auth.signUp.email') }} *</label>
+            <label for="email" class="field-label">{{ $t('auth.signUp.email') }}</label>
             <pv-input-text
               id="email"
               v-model="email"
-              :class="{'p-invalid': submitted && !email}"
               type="email"
               :placeholder="$t('auth.signUp.emailPlaceholder')"
             />
-            <small v-if="submitted && !email" class="p-error">{{ $t('auth.signUp.emailRequired') }}</small>
           </div>
 
           <div class="field">
-            <label for="phoneNumber" class="field-label">{{ $t('auth.signUp.phoneNumber') }} *</label>
+            <label for="phoneNumber" class="field-label">{{ $t('auth.signUp.phoneNumber') }}</label>
             <pv-input-text
               id="phoneNumber"
               v-model="phoneNumber"
-              :class="{'p-invalid': submitted && !phoneNumber}"
               :placeholder="$t('auth.signUp.phoneNumberPlaceholder')"
             />
-            <small v-if="submitted && !phoneNumber" class="p-error">{{ $t('auth.signUp.phoneNumberRequired') }}</small>
           </div>
 
           <div class="field">
-            <label for="role" class="field-label">{{ $t('auth.signUp.role') }} *</label>
+            <label for="role" class="field-label">{{ $t('auth.signUp.role') }}</label>
             <pv-dropdown
               id="role"
               v-model="role"
               :options="roleOptions"
               optionLabel="label"
               optionValue="value"
-              :class="{'p-invalid': submitted && !role}"
               :placeholder="$t('auth.signUp.rolePlaceholder')"
               class="w-full"
             />
-            <small v-if="submitted && !role" class="p-error">{{ $t('auth.signUp.roleRequired') }}</small>
           </div>
-        </div>
-
-        <!-- Optional Fields Section -->
-        <div class="form-section">
-          <h3 class="section-title">{{ $t('auth.signUp.optionalFields') }}</h3>
 
           <div class="field-row">
             <div class="field">

@@ -3,15 +3,15 @@ import httpInstance from './http.instance.js';
 export default {
     /**
      * Obtiene todos los datos del perfil de un usuario
-     * @param {number} profileId Identificador del perfil
+     * @param {number} userId Identificador del usuario
      * @returns {Promise<Object>} Datos del perfil junto a estadísticas y certificaciones
      */
-    async getProfileData(profileId = 1) {
+    async getProfileData(userId = 1) {
         try {
-            console.log(`📊 Fetching profile with ID: ${profileId}`);
+            console.log(`📊 Fetching profile for user ID: ${userId}`);
             console.log(`🔑 Token in localStorage: ${localStorage.getItem('token') ? 'YES' : 'NO'}`);
 
-            const response = await httpInstance.get(`/profiles/${profileId}`);
+            const response = await httpInstance.get(`/profiles/user/${userId}`);
             const profile = response.data;
 
             console.log('✅ Profile data loaded successfully:', profile);

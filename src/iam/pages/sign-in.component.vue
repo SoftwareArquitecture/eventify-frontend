@@ -23,10 +23,29 @@ export default {
      * If sign in is successful, it redirects to the home page.
      * The store will update the current username and signed in status.
      */
-    onSignIn() {
+    async onSignIn() {
+      if (!this.username || !this.password) {
+        this.$toast.add({
+          severity: 'warn',
+          summary: 'Sign In',
+          detail: 'Username and password are required',
+          life: 3000
+        });
+        return;
+      }
+
       let authenticationStore = useAuthenticationStore();
       let signInRequest = new SignInRequest(this.username, this.password);
-      authenticationStore.signIn(signInRequest, this.$router);
+      const result = await authenticationStore.signIn(signInRequest, this.$router);
+
+      if (result && !result.success) {
+        this.$toast.add({
+          severity: 'error',
+          summary: 'Sign In',
+          detail: result.message,
+          life: 5000
+        });
+      }
     },
     goToSignUp() {
       this.$router.push('/sign-up');
@@ -36,6 +55,7 @@ export default {
 </script>
 
 <template>
+  <pv-toast />
   <div class="auth-container">
     <div class="auth-content">
       <img src="/src/assets/eventify-logo.png" alt="Eventify" class="logo" />

@@ -108,9 +108,22 @@ export const useAuthenticationStore = defineStore('authentication',{
 
                 // Redirigir a Events después del login exitoso
                 router.push({ name: 'Events' });
+                return { success: true };
             } catch (error) {
                 console.error('❌ Sign-in error:', error.response?.data || error.message);
-                router.push({ name: 'sign-in' });
+
+                // Extract error message from backend
+                let errorMessage = 'Invalid username or password';
+
+                if (error.response?.data) {
+                    if (typeof error.response.data === 'string') {
+                        errorMessage = error.response.data;
+                    } else if (error.response.data.message) {
+                        errorMessage = error.response.data.message;
+                    }
+                }
+
+                return { success: false, message: errorMessage };
             }
         },
         /**
@@ -127,11 +140,38 @@ export const useAuthenticationStore = defineStore('authentication',{
                 if (import.meta.env.DEV) console.log('📝 Attempting sign-up for user:', signUpdRequest.username);
                 const response = await authenticationService.signUp(signUpdRequest);
                 let signUpResponse = new SignUpResponse(response.data.message);
-                router.push({ name: 'sign-in' });
                 if (import.meta.env.DEV) console.log('✅ Sign-up successful:', signUpResponse);
+                router.push({ name: 'sign-in' });
+                return { success: true, message: signUpResponse.message };
             } catch (error) {
                 console.error('❌ Sign-up error:', error.response?.data || error.message);
-                router.push({ name: 'sign-up' });
+
+                // Extract error message from backend
+                let errorMessage = 'Error creating account. Please try again.';
+
+                if (error.response?.data) {
+                    // If the backend returns a string error message with stack trace
+                    if (typeof error.response.data === 'string') {
+                        // Extract only the exception message (first line before 'at' or newline)
+                        const lines = error.response.data.split('\n');
+                        const firstLine = lines[0].trim();
+
+                        // Extract message after "Exception: "
+                        const match = firstLine.match(/Exception:\s*(.+)$/);
+                        if (match) {
+                            errorMessage = match[1].trim();
+                        } else {
+                            // If no Exception pattern, use the first line
+                            errorMessage = firstLine;
+                        }
+                    }
+                    // If the backend returns an object with a message property
+                    else if (error.response.data.message) {
+                        errorMessage = error.response.data.message;
+                    }
+                }
+
+                return { success: false, message: errorMessage };
             }
         },
         /**

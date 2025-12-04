@@ -16,8 +16,15 @@ export default {
   },
   watch: {
     selectedLocale(newLocale) {
-      this.$i18n.locale = newLocale;
-      localStorage.setItem('locale', newLocale);
+      // Asegurarse de que newLocale sea un string válido
+      if (!newLocale || newLocale === 'null' || newLocale === 'undefined') {
+        return;
+      }
+      const locale = typeof newLocale === 'string' ? newLocale : String(newLocale);
+      if (this.$i18n.availableLocales.includes(locale)) {
+        this.$i18n.locale = locale;
+        localStorage.setItem('locale', locale);
+      }
     }
   }
 }

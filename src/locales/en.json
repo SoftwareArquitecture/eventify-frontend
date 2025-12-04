@@ -35,7 +35,7 @@
       "title": "Create Account",
       "subtitle": "Join Eventify Platform",
       "requiredFields": "Required Information",
-      "optionalFields": "Optional Information (recommended)",
+      "optionalFields": "Optional Information (can be completed later in your profile)",
       "username": "Username",
       "usernamePlaceholder": "Enter your username",
       "usernameRequired": "Username is required",
@@ -79,7 +79,8 @@
       "button": "Create Account",
       "loading": "Creating account...",
       "hasAccount": "Already have an account?",
-      "signIn": "Sign in"
+      "signIn": "Sign in",
+      "successMessage": "Account created successfully! Please sign in."
     },
     "errors": {
       "invalidCredentials": "Invalid username or password",
@@ -377,9 +378,12 @@
     "newEventCreated": "New event created",
     "taskCompleted": "Task completed",
     "quoteSent": "Quote sent",
+    "unknownActivity": "Unknown activity",
     "timeAgo": "{time} ago"
   },
   "timeUnits": {
+    "minutes": "minutes",
+    "minute": "minute",
     "hours": "hours",
     "hour": "hour",
     "days": "days",

@@ -1,5 +1,7 @@
 <script>
 import EventService from "../../event-management/services/event.service.js";
+import dashboardService from "../../shared/services/dashboard.service.js";
+import { useAuthenticationStore } from '../../iam/services/authentication.store.js';
 
 export default {
   name: "home.component",
@@ -22,7 +24,21 @@ export default {
   methods: {
     async loadDashboardData() {
       try {
-        // Cargar eventos próximos
+        const authStore = useAuthenticationStore();
+        const userId = authStore.currentUserId;
+
+        // Cargar estadísticas reales del backend
+        const statistics = await dashboardService.getStatistics(userId);
+        this.stats.upcomingEvents = statistics.upcomingEvents;
+        this.stats.pendingTasks = statistics.pendingTasks;
+        this.stats.pendingQuotes = statistics.pendingQuotes;
+        this.stats.completedEvents = statistics.completedEvents;
+
+        // Cargar actividad reciente real del backend
+        const activities = await dashboardService.getActivity(userId);
+        this.recentActivity = this.transformActivities(activities);
+
+        // Cargar eventos próximos para mostrar en la lista
         const eventsResponse = await EventService.getEvents();
         const allEvents = eventsResponse.data || [];
 
@@ -35,29 +51,83 @@ export default {
             const eventDate = new Date(event.date);
             return eventDate >= today && eventDate <= thirtyDaysLater;
           })
-          .slice(0, 4) // Reducido a 4 para mejor ajuste vertical
+          .slice(0, 4)
           .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        // Calcular estadísticas
-        this.stats.upcomingEvents = this.upcomingEvents.length;
-        this.stats.completedEvents = allEvents.filter(event => event.status === 'Completed').length;
-
-        // Simulamos algunos datos para las otras estadísticas
-        this.stats.pendingTasks = Math.floor(Math.random() * 10) + 3;
-        this.stats.pendingQuotes = Math.floor(Math.random() * 5) + 1;
-
-        // Actividad reciente simulada
-        this.recentActivity = [
-          { type: 'event', messageKey: 'activity.newEventCreated', time: '2', timeUnit: 'hours', icon: 'pi-star', color: '#4ECDC4' },
-          { type: 'task', messageKey: 'activity.taskCompleted', time: '5', timeUnit: 'hours', icon: 'pi-check', color: '#27ae60' },
-          { type: 'quote', messageKey: 'activity.quoteSent', time: '1', timeUnit: 'day', icon: 'pi-dollar', color: '#f39c12' }
-        ];
 
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       } finally {
         this.loading = false;
       }
+    },
+
+    /**
+     * Transforma las actividades del backend al formato del frontend
+     */
+    transformActivities(activities) {
+      if (!activities || activities.length === 0) {
+        return [];
+      }
+
+      return activities.slice(0, 3).map(activity => {
+        const timeAgo = this.getTimeAgo(activity.timestamp);
+
+        return {
+          type: activity.type,
+          title: activity.title,
+          description: activity.description,
+          timestamp: activity.timestamp,
+          status: activity.status,
+          time: timeAgo.value,
+          timeUnit: timeAgo.unit,
+          icon: this.getActivityIcon(activity.type),
+          color: this.getActivityColor(activity.type)
+        };
+      });
+    },
+
+    /**
+     * Calcula el tiempo transcurrido desde una fecha
+     */
+    getTimeAgo(timestamp) {
+      const now = new Date();
+      const activityDate = new Date(timestamp);
+      const diffMs = now - activityDate;
+      const diffMinutes = Math.floor(diffMs / (1000 * 60));
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffMinutes < 60) {
+        return { value: diffMinutes.toString(), unit: 'minutes' };
+      } else if (diffHours < 24) {
+        return { value: diffHours.toString(), unit: 'hours' };
+      } else {
+        return { value: diffDays.toString(), unit: 'days' };
+      }
+    },
+
+    /**
+     * Obtiene el icono según el tipo de actividad
+     */
+    getActivityIcon(type) {
+      const icons = {
+        'event': 'pi-star',
+        'quote': 'pi-dollar',
+        'task': 'pi-check'
+      };
+      return icons[type] || 'pi-circle';
+    },
+
+    /**
+     * Obtiene el color según el tipo de actividad
+     */
+    getActivityColor(type) {
+      const colors = {
+        'event': '#4ECDC4',
+        'quote': '#f39c12',
+        'task': '#27ae60'
+      };
+      return colors[type] || '#95a5a6';
     },
 
     formatDate(dateString) {
@@ -70,8 +140,9 @@ export default {
       });
     },
 
-    getActivityMessage(messageKey) {
-      return this.$t(messageKey);
+    getActivityMessage(activity) {
+      // Para actividades reales del backend, usar el título directamente
+      return activity.title || this.$t('activity.unknownActivity');
     },
 
     getActivityTime(time, timeUnit) {
@@ -220,7 +291,7 @@ export default {
               <i :class="`pi ${activity.icon}`" :style="{ color: activity.color }"></i>
             </div>
             <div class="activity-content">
-              <p class="activity-message">{{ getActivityMessage(activity.messageKey) }}</p>
+              <p class="activity-message">{{ getActivityMessage(activity) }}</p>
               <span class="activity-time">{{ getActivityTime(activity.time, activity.timeUnit) }}</span>
             </div>
           </div>
