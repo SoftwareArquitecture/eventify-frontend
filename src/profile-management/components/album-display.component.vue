@@ -1,5 +1,6 @@
 <script>
 import AlbumFormComponent from '../../profile-management/components/create-and-edit-album.component.vue';
+import httpInstance from '../../shared/services/http.instance.js';
 
 export default {
   name: 'AlbumsPageComponent',
@@ -18,7 +19,6 @@ export default {
       error: null,
       albums: [],
       sortOption: 'recent',
-      apiUrl: import.meta.env.VITE_API_BASE_URL,
       showAlbumForm: false,
       editAlbumId: null,
       currentPage: 1,
@@ -173,13 +173,9 @@ export default {
 
       try {
         console.log(`Fetching albums for profile ${this.profileId}`);
-        const response = await fetch(`${this.apiUrl}/profiles/${this.profileId}/albums`);
+        const response = await httpInstance.get(`/profiles/${this.profileId}/albums`);
 
-        if (!response.ok) {
-          throw new Error(`Error fetching albums: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = response.data;
         this.albums = Array.isArray(data)
             ? data.map(a => ({ ...a, title: a.name }))
             : [];
@@ -257,11 +253,8 @@ export default {
       this.detailsLoading = true;
       this.detailsError = null;
       try {
-        const response = await fetch(`${this.apiUrl}/profiles/${this.profileId}/albums/${albumId}`);
-        if (!response.ok) {
-          throw new Error(`Error fetching album: ${response.status}`);
-        }
-        this.albumDetails = await response.json();
+        const response = await httpInstance.get(`/profiles/${this.profileId}/albums/${albumId}`);
+        this.albumDetails = response.data;
         this.showAlbumDetails = true;
       } catch (error) {
         console.error('Error fetching album details:', error);
@@ -373,9 +366,7 @@ export default {
       try {
         // In a real app, this could be a batch DELETE request
         const deletePromises = this.selectedAlbums.map(albumId =>
-            fetch(`${this.apiUrl}/profiles/${this.profileId}/albums/${albumId}`, {
-              method: 'DELETE'
-            })
+            httpInstance.delete(`/profiles/${this.profileId}/albums/${albumId}`)
         );
 
         await Promise.all(deletePromises);

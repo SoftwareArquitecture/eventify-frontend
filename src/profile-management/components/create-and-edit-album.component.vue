@@ -1,5 +1,7 @@
 <!-- create-and-edit-album.component.vue -->
 <script>
+import httpInstance from '../../shared/services/http.instance.js';
+
 export default {
   name: 'AlbumFormComponent',
   props: {
@@ -78,11 +80,9 @@ export default {
     },
     async loadEvents() {
       try {
-        const response = await fetch(`${this.apiUrl}/events?profileId=${this.profileId}`);
-        if (response.ok) {
-          this.events = await response.json();
-          return;
-        }
+        const response = await httpInstance.get(`/events?profileId=${this.profileId}`);
+        this.events = response.data;
+        return;
       } catch (error) {
         console.error('Error loading events:', error);
       }
@@ -98,13 +98,10 @@ export default {
       if (!this.albumId) return;
 
       try {
-        const response = await fetch(
-            `${this.apiUrl}/profiles/${this.profileId}/albums/${this.albumId}`);
-        if (!response.ok) {
-          throw new Error(`Error fetching album: ${response.status}`);
-        }
+        const response = await httpInstance.get(
+            `/profiles/${this.profileId}/albums/${this.albumId}`);
 
-        const albumData = await response.json();
+        const albumData = response.data;
         this.albumData = {
           title: albumData.name || '',
           date: this.formatDateForInput(new Date()),
@@ -176,15 +173,9 @@ export default {
         };
 
         if (this.isEditMode) {
-          const response = await fetch(`${this.apiUrl}/profiles/${this.profileId}/albums/${this.albumId}`, {
-            method: 'GET'
-          });
+          const response = await httpInstance.get(`/profiles/${this.profileId}/albums/${this.albumId}`);
 
-          if (!response.ok) {
-            throw new Error(`Error fetching album: ${response.status}`);
-          }
-
-          const currentAlbum = await response.json();
+          const currentAlbum = response.data;
 
           const remainingPhotos = Array.isArray(currentAlbum.photos)
               ? currentAlbum.photos.filter(p => !this.photosToDelete.includes(p))
@@ -194,27 +185,15 @@ export default {
 
           albumData.photos = [...remainingPhotos, ...newPhotos];
 
-          await fetch(`${this.apiUrl}/profiles/${this.profileId}/albums/${this.albumId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(albumData)
-          });
+          await httpInstance.put(`/profiles/${this.profileId}/albums/${this.albumId}`, albumData);
 
           savedAlbumId = this.albumId;
         } else {
           albumData.photos = this.selectedFiles.map(file => file.name);
 
-          const response = await fetch(`${this.apiUrl}/profiles/${this.profileId}/albums`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(albumData)
-          });
+          const response = await httpInstance.post(`/profiles/${this.profileId}/albums`, albumData);
 
-          const newAlbum = await response.json();
+          const newAlbum = response.data;
           savedAlbumId = newAlbum.id;
         }
 

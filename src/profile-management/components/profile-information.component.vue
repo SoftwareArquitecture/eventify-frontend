@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted,watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import profileService from '../services/profile.service.js';
 import { profile as ProfileEntity } from '../model/profile.entity.js';
 
@@ -10,11 +10,8 @@ const props = defineProps({
   }
 });
 const profile = ref(null);
-const backupProfile = ref(null); // For canceling edits
 const loading = ref(false);
 const error = ref('');
-const success = ref('');
-const isEditing = ref(false);
 
 /**
  * Adapter: Converts backend response to frontend model
@@ -35,9 +32,7 @@ function adaptProfile(response) {
     title: response.role || '',
     email: response.email || '',
     phone: response.phoneNumber || '',
-    location: response.streetAddress || '',
-    webSite: response.webSite || '',
-    biography: response.biography || ''
+    location: response.streetAddress || ''
   };
 }
 
@@ -47,57 +42,13 @@ function adaptProfile(response) {
 async function fetchProfile() {
   loading.value = true;
   error.value = '';
-  success.value = '';
   try {
     const response = await profileService.getProfileById(props.profileId);
     profile.value = ProfileEntity.fromJSON(adaptProfile(response));
-    backupProfile.value = ProfileEntity.fromJSON(adaptProfile(response));
   } catch (err) {
     error.value = 'Error loading profile';
   } finally {
     loading.value = false;
-  }
-}
-
-/**
- * Saves edited profile to backend
- */
-async function saveProfile() {
-  loading.value = true;
-  error.value = '';
-  success.value = '';
-  try {
-    // Prepare payload for backend
-    const payload = {
-      fullName: `${profile.value.name} ${profile.value.lastName}`,
-      email: profile.value.email,
-      streetAddress: profile.value.location,
-      phoneNumber: profile.value.phone,
-      webSite: profile.value.webSite,
-      biography: profile.value.biography,
-      role: profile.value.title,
-    };
-    const updated = await profileService.updateProfile(props.profileId, payload);
-    profile.value = ProfileEntity.fromJSON(adaptProfile(updated));
-    backupProfile.value = ProfileEntity.fromJSON(adaptProfile(updated));
-    isEditing.value = false;
-    success.value = 'Profile updated successfully!';
-  } catch (err) {
-    error.value = 'Error saving profile';
-  } finally {
-    loading.value = false;
-  }
-}
-
-/**
- * Cancels editing and restores original values
- */
-function cancelEdit() {
-  isEditing.value = false;
-  error.value = '';
-  success.value = '';
-  if (backupProfile.value) {
-    profile.value = ProfileEntity.fromJSON(backupProfile.value.toJSON());
   }
 }
 
@@ -107,8 +58,6 @@ const title = computed(() => profile.value ? profile.value.title : '');
 const email = computed(() => profile.value ? profile.value.email : '');
 const phone = computed(() => profile.value ? profile.value.phone : '');
 const location = computed(() => profile.value ? profile.value.location : '');
-const website = computed(() => profile.value ? profile.value.webSite : '');
-const bio = computed(() => profile.value ? profile.value.biography : '');
 
 onMounted(fetchProfile);
 // Load profile when component is mounted or when the id changes
@@ -136,46 +85,23 @@ watch(
         <div class="contact-grid">
           <div class="contact-row">
             <div class="contact-label">{{ $t('profile.emailAddress') }}</div>
-            <div class="contact-value" v-if="!isEditing">{{ email }}</div>
-            <input v-else v-model="profile.email" :placeholder="$t('profile.emailAddress')" />
+            <div class="contact-value">{{ email }}</div>
           </div>
 
           <div class="contact-row">
             <div class="contact-label">{{ $t('profile.phoneNumber') }}</div>
-            <div class="contact-value" v-if="!isEditing">{{ phone }}</div>
-            <input v-else v-model="profile.phone" :placeholder="$t('profile.phoneNumber')" />
+            <div class="contact-value">{{ phone }}</div>
           </div>
 
           <div class="contact-row">
             <div class="contact-label">{{ $t('profile.location') }}</div>
-            <div class="contact-value" v-if="!isEditing">{{ location }}</div>
-            <input v-else v-model="profile.location" :placeholder="$t('profile.location')" />
-          </div>
-
-          <div class="contact-row">
-            <div class="contact-label">{{ $t('profile.website') }}</div>
-            <div class="contact-value" v-if="!isEditing">
-              <a :href="website" class="website-link">{{ website }}</a>
-            </div>
-            <input v-else v-model="profile.webSite" :placeholder="$t('profile.website')" />
+            <div class="contact-value">{{ location }}</div>
           </div>
         </div>
       </div>
 
-      <div class="about-section">
-        <h3 class="section-title">{{ $t('profile.aboutMe') }}</h3>
-        <p class="about-text" v-if="!isEditing">{{ bio }}</p>
-        <textarea v-else v-model="profile.biography" :placeholder="$t('profile.aboutMe')"></textarea>
-      </div>
-
-      <div style="margin-top:2rem;">
-        <button v-if="!isEditing" @click="isEditing = true">{{ $t('common.edit') }}</button>
-        <button v-else @click="saveProfile" :disabled="loading">{{ $t('common.save') }}</button>
-        <button v-if="isEditing" @click="cancelEdit" :disabled="loading">{{ $t('common.cancel') }}</button>
-        <div v-if="error" style="color:red; margin-top:0.5rem;">{{ error }}</div>
-        <div v-if="success" style="color:green; margin-top:0.5rem;">{{ success }}</div>
-        <div v-if="loading" style="margin-top:0.5rem;">{{ $t('common.saving') }}</div>
-      </div>
+      <div v-if="error" style="color:red; margin-top:1rem; text-align:center;">{{ error }}</div>
+      <div v-if="loading" style="margin-top:1rem; text-align:center;">{{ $t('common.loading') }}</div>
     </div>
   </div>
 </template>
@@ -251,25 +177,6 @@ watch(
   color: #333;
 }
 
-.website-link {
-  color: #3b82f6;
-  text-decoration: none;
-}
-
-.website-link:hover {
-  text-decoration: underline;
-}
-
-/* About me section */
-.about-section {
-  margin-bottom: 5px;
-}
-
-.about-text {
-  text-align: justify;
-  line-height: 1.6;
-  color: #555;
-}
 
 /* Responsive */
 @media (max-width: 768px) {

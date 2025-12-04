@@ -48,29 +48,6 @@
                     :bio="user.bio"
                 />
               </div>
-
-              <!-- Sidebar with statistics and certifications -->
-              <div class="sidebar-info">
-                <!-- Statistics component -->
-                <statistics-display
-                    titleKey="statistics.title"
-                    completedEventsLabelKey="statistics.completedEvents"
-                    sentQuotesLabelKey="statistics.sentQuotes"
-                    servedCustomersLabelKey="statistics.servedCustomers"
-                    averageRatingLabelKey="statistics.averageRating"
-                    :completed-events="statistics.completedEvents"
-                    :sent-quotes="statistics.sentQuotes"
-                    :served-customers="statistics.servedCustomers"
-                    :average-rating="statistics.averageRating"
-                />
-
-                <!-- Certifications component -->
-                <certifications-list
-                    titleKey="certifications.title"
-                    noCertificationsKey="certifications.noCertifications"
-                    :certifications="certifications.list"
-                />
-              </div>
             </div>
           </div>
 
@@ -98,8 +75,6 @@
 </template>
 <script>
 import ProfileInformation from '../../profile-management/components/profile-information.component.vue';
-import StatisticsDisplay from '../../profile-management/components/statistics-display.component.vue';
-import CertificationsList from '../../profile-management/components/certifications-list.component.vue';
 import AlbumsPageComponent from '../../profile-management/components/album-display.component.vue';
 import ReviewsComponent from '../../profile-management/components/reviews.component.vue';
 import ServicesComponent from '../../profile-management/components/services.component.vue';
@@ -116,8 +91,6 @@ export default {
   name: 'ProfilePageComponent',
   components: {
     ProfileInformation,
-    StatisticsDisplay,
-    CertificationsList,
     AlbumsPageComponent,
     ReviewsComponent,
     ServicesComponent,
@@ -145,9 +118,7 @@ export default {
         location: '',
         website: '',
         bio: ''
-      },
-      statistics: {},
-      certifications: { list: [] }
+      }
     };
   },
   created() {
@@ -178,8 +149,6 @@ export default {
       try {
         const data = await profileService.getProfileData(this.profileId);
         this.user = data.user;
-        this.statistics = data.statistics;
-        this.certifications = data.certifications;
         this.loading = false;
       } catch (error) {
         console.error('Error loading profile data:', error);
@@ -310,13 +279,6 @@ export default {
   min-width: 0;
 }
 
-/* Sidebar */
-.sidebar-info {
-  width: 300px;
-  flex-shrink: 0;
-  margin-top: 0;
-}
-
 /* Coming Soon section */
 .coming-soon {
   display: flex;
@@ -374,17 +336,6 @@ export default {
 }
 
 /* Responsive */
-@media (max-width: 992px) {
-  .tab-content-container {
-    flex-direction: column;
-  }
-
-  .sidebar-info {
-    width: 100%;
-    margin-top: 20px;
-  }
-}
-
 @media (max-width: 768px) {
   .tabs-row {
     overflow-x: auto;

@@ -13,24 +13,16 @@ export default {
       lastName: "",
       email: "",
       phoneNumber: "",
-      role: "",
       street: "",
-      number: "",
       city: "",
-      postalCode: "",
       country: "",
-      webSite: "",
-      biography: "",
-      submitted: false,
-      roleOptions: [
-        { label: this.$t('auth.signUp.roleOrganizer'), value: 'Organizer' },
-        { label: this.$t('auth.signUp.roleHoster'), value: 'Hoster' }
-      ]
+      submitted: false
     };
   },
   computed: {
     isFormValid() {
-      return this.username && this.password;
+      return this.username && this.password && this.email && this.firstName &&
+             this.lastName && this.phoneNumber && this.street && this.city && this.country;
     }
   },
   methods: {
@@ -41,7 +33,7 @@ export default {
         this.$toast.add({
           severity: 'warn',
           summary: this.$t('auth.signUp.title'),
-          detail: this.$t('auth.signUp.usernameRequired') + ' & ' + this.$t('auth.signUp.passwordRequired'),
+          detail: this.$t('auth.signUp.requiredFields'),
           life: 3000
         });
         return;
@@ -54,14 +46,14 @@ export default {
         this.lastName,
         this.email,
         this.phoneNumber,
-        this.role,
+        'User',
         this.street,
-        this.number,
+        '',
         this.city,
-        this.postalCode,
+        '',
         this.country,
-        this.webSite,
-        this.biography
+        '',
+        ''
       );
 
       const result = await this.authenticationStore.signUp(signUpRequest, this.$router);
@@ -122,130 +114,85 @@ export default {
           <small v-if="submitted && !password" class="p-error">{{ $t('auth.signUp.passwordRequired') }}</small>
         </div>
 
-        <!-- Optional Fields Section -->
-        <div class="form-section">
-          <h3 class="section-title">{{ $t('auth.signUp.optionalFields') }}</h3>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="firstName" class="field-label">{{ $t('auth.signUp.firstName') }}</label>
-              <pv-input-text
-                id="firstName"
-                v-model="firstName"
-                :placeholder="$t('auth.signUp.firstNamePlaceholder')"
-              />
-            </div>
-
-            <div class="field">
-              <label for="lastName" class="field-label">{{ $t('auth.signUp.lastName') }}</label>
-              <pv-input-text
-                id="lastName"
-                v-model="lastName"
-                :placeholder="$t('auth.signUp.lastNamePlaceholder')"
-              />
-            </div>
-          </div>
-
+        <div class="field-row">
           <div class="field">
-            <label for="email" class="field-label">{{ $t('auth.signUp.email') }}</label>
+            <label for="firstName" class="field-label">{{ $t('auth.signUp.firstName') }} *</label>
             <pv-input-text
-              id="email"
-              v-model="email"
-              type="email"
-              :placeholder="$t('auth.signUp.emailPlaceholder')"
+              id="firstName"
+              v-model="firstName"
+              :class="{'p-invalid': submitted && !firstName}"
+              :placeholder="$t('auth.signUp.firstNamePlaceholder')"
             />
+            <small v-if="submitted && !firstName" class="p-error">{{ $t('auth.signUp.firstNameRequired') }}</small>
           </div>
 
           <div class="field">
-            <label for="phoneNumber" class="field-label">{{ $t('auth.signUp.phoneNumber') }}</label>
+            <label for="lastName" class="field-label">{{ $t('auth.signUp.lastName') }} *</label>
             <pv-input-text
-              id="phoneNumber"
-              v-model="phoneNumber"
-              :placeholder="$t('auth.signUp.phoneNumberPlaceholder')"
+              id="lastName"
+              v-model="lastName"
+              :class="{'p-invalid': submitted && !lastName}"
+              :placeholder="$t('auth.signUp.lastNamePlaceholder')"
             />
+            <small v-if="submitted && !lastName" class="p-error">{{ $t('auth.signUp.lastNameRequired') }}</small>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email" class="field-label">{{ $t('auth.signUp.email') }} *</label>
+          <pv-input-text
+            id="email"
+            v-model="email"
+            :class="{'p-invalid': submitted && !email}"
+            type="email"
+            :placeholder="$t('auth.signUp.emailPlaceholder')"
+          />
+          <small v-if="submitted && !email" class="p-error">{{ $t('auth.signUp.emailRequired') }}</small>
+        </div>
+
+        <div class="field">
+          <label for="phoneNumber" class="field-label">{{ $t('auth.signUp.phoneNumber') }} *</label>
+          <pv-input-text
+            id="phoneNumber"
+            v-model="phoneNumber"
+            :class="{'p-invalid': submitted && !phoneNumber}"
+            :placeholder="$t('auth.signUp.phoneNumberPlaceholder')"
+          />
+          <small v-if="submitted && !phoneNumber" class="p-error">{{ $t('auth.signUp.phoneNumberRequired') }}</small>
+        </div>
+
+        <div class="field">
+          <label for="street" class="field-label">{{ $t('auth.signUp.street') }} *</label>
+          <pv-input-text
+            id="street"
+            v-model="street"
+            :class="{'p-invalid': submitted && !street}"
+            :placeholder="$t('auth.signUp.streetPlaceholder')"
+          />
+          <small v-if="submitted && !street" class="p-error">{{ $t('auth.signUp.streetRequired') }}</small>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="city" class="field-label">{{ $t('auth.signUp.city') }} *</label>
+            <pv-input-text
+              id="city"
+              v-model="city"
+              :class="{'p-invalid': submitted && !city}"
+              :placeholder="$t('auth.signUp.cityPlaceholder')"
+            />
+            <small v-if="submitted && !city" class="p-error">{{ $t('auth.signUp.cityRequired') }}</small>
           </div>
 
           <div class="field">
-            <label for="role" class="field-label">{{ $t('auth.signUp.role') }}</label>
-            <pv-dropdown
-              id="role"
-              v-model="role"
-              :options="roleOptions"
-              optionLabel="label"
-              optionValue="value"
-              :placeholder="$t('auth.signUp.rolePlaceholder')"
-              class="w-full"
-            />
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="street" class="field-label">{{ $t('auth.signUp.street') }}</label>
-              <pv-input-text
-                id="street"
-                v-model="street"
-                :placeholder="$t('auth.signUp.streetPlaceholder')"
-              />
-            </div>
-
-            <div class="field">
-              <label for="number" class="field-label">{{ $t('auth.signUp.number') }}</label>
-              <pv-input-text
-                id="number"
-                v-model="number"
-                :placeholder="$t('auth.signUp.numberPlaceholder')"
-              />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="city" class="field-label">{{ $t('auth.signUp.city') }}</label>
-              <pv-input-text
-                id="city"
-                v-model="city"
-                :placeholder="$t('auth.signUp.cityPlaceholder')"
-              />
-            </div>
-
-            <div class="field">
-              <label for="postalCode" class="field-label">{{ $t('auth.signUp.postalCode') }}</label>
-              <pv-input-text
-                id="postalCode"
-                v-model="postalCode"
-                :placeholder="$t('auth.signUp.postalCodePlaceholder')"
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="country" class="field-label">{{ $t('auth.signUp.country') }}</label>
+            <label for="country" class="field-label">{{ $t('auth.signUp.country') }} *</label>
             <pv-input-text
               id="country"
               v-model="country"
+              :class="{'p-invalid': submitted && !country}"
               :placeholder="$t('auth.signUp.countryPlaceholder')"
             />
-          </div>
-
-          <div class="field">
-            <label for="webSite" class="field-label">{{ $t('auth.signUp.webSite') }}</label>
-            <pv-input-text
-              id="webSite"
-              v-model="webSite"
-              type="url"
-              :placeholder="$t('auth.signUp.webSitePlaceholder')"
-            />
-          </div>
-
-          <div class="field">
-            <label for="biography" class="field-label">{{ $t('auth.signUp.biography') }}</label>
-            <pv-textarea
-              id="biography"
-              v-model="biography"
-              :placeholder="$t('auth.signUp.biographyPlaceholder')"
-              rows="3"
-              class="w-full"
-            />
+            <small v-if="submitted && !country" class="p-error">{{ $t('auth.signUp.countryRequired') }}</small>
           </div>
         </div>
 

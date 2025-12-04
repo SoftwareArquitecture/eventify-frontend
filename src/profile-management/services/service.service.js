@@ -1,11 +1,9 @@
 import { Service } from '../model/service.entity';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+import httpInstance from '../../shared/services/http.instance.js';
 
 class ServiceService {
     constructor() {
-        this.baseUrl = API_URL;
+        this.baseUrl = import.meta.env.VITE_API_BASE_URL;
     }
     /**
      * Gets all services for a profile
@@ -16,7 +14,7 @@ class ServiceService {
         try {
             console.log(`Fetching services for profile ${profileId}...`);
 
-            const response = await axios.get(`${API_URL}/profiles/${profileId}/service-catalogs`);
+            const response = await httpInstance.get(`/profiles/${profileId}/service-catalogs`);
             const data = response.data;
 
             console.log('Raw services data:', data); // Log raw data for debugging
@@ -63,7 +61,7 @@ class ServiceService {
      */
     async getAllServices(profileId) {
         try {
-            const response = await axios.get(`${API_URL}/profiles/${profileId}/service-catalogs`);
+            const response = await httpInstance.get(`/profiles/${profileId}/service-catalogs`);
             const data = response.data;
 
             // Handle both array response and object with data property
@@ -82,7 +80,7 @@ class ServiceService {
      */
     async getServiceById(profileId, id) {
         try {
-            const response = await axios.get(`${API_URL}/profiles/${profileId}/service-catalogs/${id}`);
+            const response = await httpInstance.get(`/profiles/${profileId}/service-catalogs/${id}`);
             return Service.fromDTO(response.data);
         } catch (error) {
             console.error(`Error in getServiceById(${id}):`, error);
@@ -110,7 +108,7 @@ class ServiceService {
 
             console.log('Service DTO being sent:', serviceDTO);
 
-            const response = await axios.post(`${API_URL}/profiles/${service.profileId}/service-catalogs`, serviceDTO);
+            const response = await httpInstance.post(`/profiles/${service.profileId}/service-catalogs`, serviceDTO);
             const data = response.data;
 
             console.log('Service created API response:', data);
@@ -140,7 +138,7 @@ class ServiceService {
     async updateService(service) {
         try {
             const serviceDTO = service.toDTO ? service.toDTO() : service;
-            const response = await axios.put(`${API_URL}/profiles/${service.profileId}/service-catalogs/${service.id}`, serviceDTO);
+            const response = await httpInstance.put(`/profiles/${service.profileId}/service-catalogs/${service.id}`, serviceDTO);
             return Service.fromDTO(response.data);
         } catch (error) {
             console.error(`Error in updateService:`, error);
@@ -157,7 +155,7 @@ class ServiceService {
      */
     async patchService(profileId, id, serviceData) {
         try {
-            const response = await axios.patch(`${API_URL}/profiles/${profileId}/service-catalogs/${id}`, serviceData);
+            const response = await httpInstance.patch(`/profiles/${profileId}/service-catalogs/${id}`, serviceData);
             return Service.fromDTO(response.data);
         } catch (error) {
             console.error(`Error in patchService:`, error);
@@ -174,7 +172,7 @@ class ServiceService {
     async deleteService(id, profileId) {
         try {
             console.log('Attempting to delete service with ID:', id);
-            const response = await axios.delete(`${API_URL}/profiles/${profileId}/service-catalogs/${id}`);
+            const response = await httpInstance.delete(`/profiles/${profileId}/service-catalogs/${id}`);
             console.log('Delete response:', response.status);
             return true;
         } catch (error) {
@@ -201,8 +199,8 @@ class ServiceService {
                 params.append('category', filters.category);
             }
 
-            const url = `${API_URL}/profiles/${filters.profileId}/service-catalogs${params.toString() ? '?' + params.toString() : ''}`;
-            const response = await axios.get(url);
+            const url = `/profiles/${filters.profileId}/service-catalogs${params.toString() ? '?' + params.toString() : ''}`;
+            const response = await httpInstance.get(url);
 
             let services = Array.isArray(response.data) ? response.data : response.data.services || [];
 
